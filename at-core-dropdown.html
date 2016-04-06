@@ -1,0 +1,30 @@
+<dom-module id="at-core-dropdown">
+  <template>
+    <style>
+      .dropdown-container {
+        position: relative;
+      }
+
+      .dropdown-content {
+        position: absolute;
+      }
+    </style>
+    <div class="dropdown-container">
+      <div class="dropdown-content">
+        <content></content>
+      </div>
+    </div>
+  </template>
+  <script>
+    'use strict';
+    Polymer({
+      is: 'at-core-dropdown',
+      properties: {
+
+      },
+      ready: function () {
+
+      }
+    });
+  </script>
+</dom-module>
