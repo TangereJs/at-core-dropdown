@@ -1,17 +1,130 @@
+<link rel="import" href="../at-theme/at-theme.html">
+
 <dom-module id="at-core-dropdown">
   <template>
+    <style include="at-form-common"></style>
     <style>
-      .dropdown-container {
+      .relative-container {
         position: relative;
       }
 
-      .dropdown-content {
+      .container {
+        display: block;
+        margin: 0;
+        padding: 0;
+        border: none;
         position: absolute;
+        overflow: visible;
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        z-index: -1;
+      }
+
+      .container.is-visible,
+      .container.is-animating {
+        z-index: 999;
+        visibility: visible;
+      }
+
+      .outline {
+        display: block;
+        background: white;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 2px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+        will-change: transform;
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: -1;
+      }
+
+      .container.is-visible .outline {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        z-index: 999;
+      }
+
+      .outline.opens--bottom-right {
+        -webkit-transform-origin: 100% 0;
+        transform-origin: 100% 0;
+      }
+
+      .outline.opens--top-left {
+        -webkit-transform-origin: 0 100%;
+        transform-origin: 0 100%;
+      }
+
+      .outline.opens--top-right {
+        -webkit-transform-origin: 100% 100%;
+        transform-origin: 100% 100%;
+      }
+
+      .content {
+        position: absolute;
+        list-style: none;
+        top: 0;
+        left: 0;
+        height: auto;
+        width: auto;
+        min-width: 124px;
+        padding: 8px 0;
+        margin: 0;
+        opacity: 0;
+        clip: rect(0 0 0 0);
+        z-index: -1;
+      }
+
+      .container.is-visible .content {
+        opacity: 1;
+        z-index: 999;
+      }
+
+      .content.is-animating {
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), clip 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .content.opens--bottom-right {
+        left: auto;
+        right: 0;
+      }
+
+      .content.opens--top-left {
+        top: auto;
+        bottom: 0;
+      }
+
+      .content.opens--top-right {
+        top: auto;
+        left: auto;
+        bottom: 0;
+        right: 0;
+      }
+
+      .content.opens--unaligned {
+        top: auto;
+        left: auto;
       }
     </style>
-    <div class="dropdown-container">
-      <div class="dropdown-content">
-        <content></content>
+    <div class="relative-container">
+      <div id="container" class="container">
+        <div id="outline" class="outline opens--bottom-left"></div>
+        <div id="content" class="content opens--bottom-left hidden">
+          <content id="insertPoint"></content>
+        </div>
       </div>
     </div>
   </template>
@@ -20,10 +133,196 @@
     Polymer({
       is: 'at-core-dropdown',
       properties: {
+        position: {
+          type: String,
+          value: "bottomLeft",
+          observer: 'positionChanged',
+          xtype: "enum",
+          xvaluelist: [{
+            title: "Top Left",
+            value: "topLeft"
+          }, {
+            title: "Top Right",
+            value: "topRight"
+          }, {
+            title: "Bottom Left",
+            value: "bottomLeft"
+          }, {
+            title: "Bottom Right",
+            value: "bottomRight"
+          }]
+        }
+      },
+      ready: function() {
+        this.Constant_ = {
+          // Total duration of the menu animation.
+          TRANSITION_DURATION_SECONDS: 0.3,
+          // The fraction of the total duration we want to use for menu item animations.
+          TRANSITION_DURATION_FRACTION: 0.8,
+          // How long the menu stays open after choosing an option (so the user can see
+          // the ripple).
+          CLOSE_TIMEOUT: 150
+        };
+
+        this.Keycodes_ = {
+          ENTER: 13,
+          ESCAPE: 27,
+          SPACE: 32,
+          UP_ARROW: 38,
+          DOWN_ARROW: 40
+        };
+
+        this.CssClasses_ = {
+          CONTAINER: 'container',
+          OUTLINE: 'outline',
+          ITEM: 'item',
+          // Statuses
+          IS_UPGRADED: 'is-upgraded',
+          IS_VISIBLE: 'is-visible',
+          IS_ANIMATING: 'is-animating',
+          // Alignment options
+          BOTTOM_LEFT: 'opens--bottom-left', // This is the default.
+          BOTTOM_RIGHT: 'opens--bottom-right',
+          TOP_LEFT: 'opens--top-left',
+          TOP_RIGHT: 'opens--top-right',
+          UNALIGNED: 'opens--unaligned'
+        };
+      },
+      positionChanged:function (newValue, oldValue) {
 
       },
-      ready: function () {
+      toggle: function(relativeTo, evt) {
+        this._updateDropdownPosition(relativeTo);
 
+        var container = this.$.container;
+        if (container.classList.contains(this.CssClasses_.IS_VISIBLE)) {
+          this.hide();
+        } else {
+          this.show(evt);
+        }
+      },
+      _updateDropdownPosition: function(relativeTo) {
+        var rect = relativeTo.getBoundingClientRect();
+        var forRect = relativeTo.parentElement.getBoundingClientRect();
+        var content = this.$.content;
+        var container = this.$.container;
+        if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
+          // Do not position the menu automatically. Requires the developer to
+          // manually specify position.
+        } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
+          // Position below the "for" element, aligned to its right.
+          container.style.right = (forRect.right - rect.right) + 'px';
+          container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
+        } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
+          // Position above the "for" element, aligned to its left.
+          container.style.left = relativeTo.offsetLeft + 'px';
+          container.style.bottom = (forRect.bottom - rect.top) + 'px';
+        } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+          // Position above the "for" element, aligned to its right.
+          container.style.right = (forRect.right - rect.right) + 'px';
+          container.style.bottom = (forRect.bottom - rect.top) + 'px';
+        } else {
+          // Default: position below the "for" element, aligned to its left.
+          container.style.left = relativeTo.offsetLeft + 'px';
+          container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
+        }
+      },
+      show: function (evt) {
+        var content = this.$.content;
+        var container = this.$.container;
+        var outline = this.$.outline;
+
+        // Measure the inner element.
+        var height = content.getBoundingClientRect().height;
+        var width = content.getBoundingClientRect().width;
+
+        // Apply the inner element's size to the container and outline.
+        container.style.width = width + 'px';
+        container.style.height = height + 'px';
+        outline.style.width = width + 'px';
+        outline.style.height = height + 'px';
+
+        var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS *
+          this.Constant_.TRANSITION_DURATION_FRACTION;
+
+        // Calculate transition delays for individual menu items, so that they fade
+        // in one at a time.
+        var items = Polymer.dom(content).querySelectorAll('.' + this.CssClasses_.ITEM);
+        for (var i = 0; i < items.length; i++) {
+          var itemDelay = null;
+          if (content.classList.contains(this.CssClasses_.TOP_LEFT) ||
+            content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+            itemDelay = ((height - items[i].offsetTop - items[i].offsetHeight) /
+              height * transitionDuration) + 's';
+          } else {
+            itemDelay = (items[i].offsetTop / height * transitionDuration) + 's';
+          }
+          items[i].style.transitionDelay = itemDelay;
+        }
+
+        // Apply the initial clip to the text before we start animating.
+        this.applyClip_(height, width);
+
+        // Wait for the next frame, turn on animation, and apply the final clip.
+        // Also make it visible. This triggers the transitions.
+        requestAnimationFrame(function() {
+          Polymer.dom(content).classList.add(this.CssClasses_.IS_ANIMATING);
+          content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
+          Polymer.dom(container).classList.add(this.CssClasses_.IS_VISIBLE);
+        }.bind(this));
+
+        // Clean up after the animation is complete.
+        this.addAnimationEndListener_();
+
+        // Add a click listener to the document, to close the menu.
+        var callback = function(e) {
+          // Check to see if the document is processing the same event that
+          // displayed the menu in the first place. If so, do nothing.
+          // Also check to see if the menu is in the process of closing itself, and
+          // do nothing in that case.
+          // Also check if the clicked element is a menu item
+          // if so, do nothing.
+          if (e !== evt && !this.closing_ &&
+            e.target.parentNode !== content) {
+            document.removeEventListener('click', callback);
+            this.hide();
+          }
+        }.bind(this);
+        document.addEventListener('click', callback);
+      },
+      hide: function () {
+
+      },
+      applyClip_: function(height, width) {
+        var content = this.$.content;
+        if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
+          // Do not clip.
+          content.style.clip = '';
+        } else if (
+          content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
+          // Clip to the top right corner of the menu.
+          content.style.clip =
+            'rect(0 ' + width + 'px 0 ' + width + 'px)';
+        } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
+          // Clip to the bottom left corner of the menu.
+          content.style.clip =
+            'rect(' + height + 'px 0 ' + height + 'px 0)';
+        } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+          // Clip to the bottom right corner of the menu.
+          content.style.clip = 'rect(' + height + 'px ' + width + 'px ' +
+            height + 'px ' + width + 'px)';
+        } else {
+          // Default: do not clip (same as clipping to the top left corner).
+          content.style.clip = '';
+        }
+      },
+      removeAnimationEndListener_: function(evt) {
+        Polymer.dom(evt.target).classList.remove(MaterialMenu.prototype.CssClasses_.IS_ANIMATING);
+      },
+      addAnimationEndListener_: function() {
+        var content = this.$.content;
+        content.addEventListener('transitionend', this.removeAnimationEndListener_);
+        content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_);
       }
     });
   </script>
