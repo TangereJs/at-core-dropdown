@@ -1,8 +1,10 @@
 {
   "name": "at-core-dropdown",
-  "version": "1.0.0.0",
+  "version": "1.0.0.1",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#master"
+    "polymer": "Polymer/polymer#master",
+    "at-theme": "TangereJs/at-theme#0.8-preview",
+    "at-carbon-icon-button": "TangereJs/at-carbon-icon-button#0.8-preview"
   }
 }

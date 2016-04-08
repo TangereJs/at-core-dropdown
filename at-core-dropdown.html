@@ -1,10 +1,11 @@
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../at-theme/at-theme.html">
 
 <dom-module id="at-core-dropdown">
   <template>
     <style include="at-form-common"></style>
     <style>
-      .relative-container {
+      .relative-container-inner {
         position: relative;
       }
 
@@ -58,17 +59,17 @@
         z-index: 999;
       }
 
-      .outline.opens--bottom-right {
+      .outline.position--bottom-right {
         -webkit-transform-origin: 100% 0;
         transform-origin: 100% 0;
       }
 
-      .outline.opens--top-left {
+      .outline.position--top-left {
         -webkit-transform-origin: 0 100%;
         transform-origin: 0 100%;
       }
 
-      .outline.opens--top-right {
+      .outline.position--top-right {
         -webkit-transform-origin: 100% 100%;
         transform-origin: 100% 100%;
       }
@@ -97,32 +98,107 @@
         transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), clip 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .content.opens--bottom-right {
+      .content.position--bottom-right {
         left: auto;
         right: 0;
       }
 
-      .content.opens--top-left {
+      .content.position--top-left {
         top: auto;
         bottom: 0;
       }
 
-      .content.opens--top-right {
+      .content.position--top-right {
         top: auto;
         left: auto;
         bottom: 0;
         right: 0;
       }
 
-      .content.opens--unaligned {
+      .content.position--unaligned {
         top: auto;
         left: auto;
+      }
+
+      ::content .item {
+        display: block;
+        border: none;
+        color: rgba(0, 0, 0, 0.87);
+        background-color: transparent;
+        text-align: left;
+        margin: 0;
+        padding: 0 16px;
+        outline-color: #bdbdbd;
+        position: relative;
+        overflow: hidden;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        letter-spacing: 0;
+        text-decoration: none;
+        cursor: pointer;
+        height: 48px;
+        line-height: 48px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .container.is-visible::content .item {
+        opacity: 1;
+      }
+
+      ::content .item::-moz-focus-inner {
+        border: 0;
+      }
+
+      ::content .item--full-bleed-divider {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      ::content .item[disabled],
+      ::content .item[data-acmb-disabled] {
+        color: #bdbdbd;
+        background-color: transparent;
+        cursor: auto;
+      }
+
+      ::content .item[disabled]:hover,
+      ::content .item[data-acmb-disabled]:hover {
+        background-color: transparent;
+      }
+
+      ::content .item[disabled]:focus,
+      ::content .item[data-acmb-disabled]:focus {
+        background-color: transparent;
+      }
+
+      ::content .item[disabled] .acmb-ripple,
+      ::content .item[data-acmb-disabled] .acmb-ripple {
+        background: transparent;
+      }
+
+      ::content .item:hover {
+        background-color: #eeeeee;
+      }
+
+      ::content .item:focus {
+        outline: none;
+        background-color: #eeeeee;
+      }
+
+      ::content .item:active {
+        background-color: #e0e0e0;
       }
     </style>
-    <div class="relative-container">
+    <div class="relative-container-inner">
       <div id="container" class="container">
-        <div id="outline" class="outline opens--bottom-left"></div>
-        <div id="content" class="content opens--bottom-left hidden">
+        <div id="outline" class="outline position--bottom-left"></div>
+        <div id="content" class="content position--bottom-left">
           <content id="insertPoint"></content>
         </div>
       </div>
@@ -181,15 +257,49 @@
           IS_VISIBLE: 'is-visible',
           IS_ANIMATING: 'is-animating',
           // Alignment options
-          BOTTOM_LEFT: 'opens--bottom-left', // This is the default.
-          BOTTOM_RIGHT: 'opens--bottom-right',
-          TOP_LEFT: 'opens--top-left',
-          TOP_RIGHT: 'opens--top-right',
-          UNALIGNED: 'opens--unaligned'
+          BOTTOM_LEFT: 'position--bottom-left', // This is the default.
+          BOTTOM_RIGHT: 'position--bottom-right',
+          TOP_LEFT: 'position--top-left',
+          TOP_RIGHT: 'position--top-right',
+          UNALIGNED: 'position--unaligned'
         };
-      },
-      positionChanged:function (newValue, oldValue) {
 
+        var contentChildren = this.getContentChildren();
+        contentChildren.forEach(function(child, index) {
+          Polymer.dom(child).classList.add('item');
+        });
+        this.updateStyles();
+      },
+      _isPositionValueValid: function(value) {
+        var list = this.properties.position.xvaluelist;
+        var found = list.find(function(item) {
+          return item.value === value;
+        });
+        var result = found !== undefined;
+        return result;
+      },
+      positionChanged: function(newValue, oldValue) {
+        if (this._isPositionValueValid(newValue)) {
+          var content = this.$.content;
+          var outline = this.$.outline;
+          // update css class
+          var classPrefix = 'position--';
+          var mode = 'bottom-left';
+          var className = classPrefix + mode;
+          if (oldValue) {
+            mode = Polymer.CaseMap.camelToDashCase(oldValue);
+            className = classPrefix + mode;
+          }
+          Polymer.dom(content).classList.remove(className);
+          Polymer.dom(outline).classList.remove(className);
+
+          if (newValue) {
+            mode = Polymer.CaseMap.camelToDashCase(newValue)
+            className = classPrefix + mode;
+          }
+          Polymer.dom(content).classList.add(className);
+          Polymer.dom(outline).classList.add(className);
+        }
       },
       toggle: function(relativeTo, evt) {
         this._updateDropdownPosition(relativeTo);
@@ -212,7 +322,7 @@
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
           container.style.right = (forRect.right - rect.right) + 'px';
-          container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
+          // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
           container.style.left = relativeTo.offsetLeft + 'px';
@@ -224,10 +334,10 @@
         } else {
           // Default: position below the "for" element, aligned to its left.
           container.style.left = relativeTo.offsetLeft + 'px';
-          container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
+          // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
         }
       },
-      show: function (evt) {
+      show: function(evt) {
         var content = this.$.content;
         var container = this.$.container;
         var outline = this.$.outline;
@@ -242,18 +352,15 @@
         outline.style.width = width + 'px';
         outline.style.height = height + 'px';
 
-        var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS *
-          this.Constant_.TRANSITION_DURATION_FRACTION;
+        var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
 
         // Calculate transition delays for individual menu items, so that they fade
         // in one at a time.
         var items = Polymer.dom(content).querySelectorAll('.' + this.CssClasses_.ITEM);
         for (var i = 0; i < items.length; i++) {
           var itemDelay = null;
-          if (content.classList.contains(this.CssClasses_.TOP_LEFT) ||
-            content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
-            itemDelay = ((height - items[i].offsetTop - items[i].offsetHeight) /
-              height * transitionDuration) + 's';
+          if (content.classList.contains(this.CssClasses_.TOP_LEFT) || content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+            itemDelay = ((height - items[i].offsetTop - items[i].offsetHeight) / height * transitionDuration) + 's';
           } else {
             itemDelay = (items[i].offsetTop / height * transitionDuration) + 's';
           }
@@ -282,16 +389,34 @@
           // do nothing in that case.
           // Also check if the clicked element is a menu item
           // if so, do nothing.
-          if (e !== evt && !this.closing_ &&
-            e.target.parentNode !== content) {
+          if (e !== evt && !this.closing_ && e.target.parentNode !== content) {
             document.removeEventListener('click', callback);
             this.hide();
           }
         }.bind(this);
         document.addEventListener('click', callback);
       },
-      hide: function () {
+      hide: function() {
+        var items = this.getContentChildren(); //Polymer.dom(this.element_).querySelectorAll('.' + this.CssClasses_.ITEM);
 
+        // Remove all transition delays; menu items fade out concurrently.
+        for (var i = 0; i < items.length; i++) {
+          items[i].style.removeProperty('transition-delay');
+        }
+
+        // Measure the inner element.
+        var rect = this.$.content.getBoundingClientRect();
+        var height = rect.height;
+        var width = rect.width;
+
+        // Turn on animation, and apply the final clip. Also make invisible.
+        // This triggers the transitions.
+        Polymer.dom(this.$.content).classList.add(this.CssClasses_.IS_ANIMATING);
+        this.applyClip_(height, width);
+        Polymer.dom(this.$.container).classList.remove(this.CssClasses_.IS_VISIBLE);
+
+        // Clean up after the animation is complete.
+        this.addAnimationEndListener_();
       },
       applyClip_: function(height, width) {
         var content = this.$.content;
@@ -301,28 +426,25 @@
         } else if (
           content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Clip to the top right corner of the menu.
-          content.style.clip =
-            'rect(0 ' + width + 'px 0 ' + width + 'px)';
+          content.style.clip = 'rect(0 ' + width + 'px 0 ' + width + 'px)';
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Clip to the bottom left corner of the menu.
-          content.style.clip =
-            'rect(' + height + 'px 0 ' + height + 'px 0)';
+          content.style.clip = 'rect(' + height + 'px 0 ' + height + 'px 0)';
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Clip to the bottom right corner of the menu.
-          content.style.clip = 'rect(' + height + 'px ' + width + 'px ' +
-            height + 'px ' + width + 'px)';
+          content.style.clip = 'rect(' + height + 'px ' + width + 'px ' + height + 'px ' + width + 'px)';
         } else {
           // Default: do not clip (same as clipping to the top left corner).
           content.style.clip = '';
         }
       },
       removeAnimationEndListener_: function(evt) {
-        Polymer.dom(evt.target).classList.remove(MaterialMenu.prototype.CssClasses_.IS_ANIMATING);
+        Polymer.dom(evt.target).classList.remove(this.CssClasses_.IS_ANIMATING);
       },
       addAnimationEndListener_: function() {
         var content = this.$.content;
-        content.addEventListener('transitionend', this.removeAnimationEndListener_);
-        content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_);
+        content.addEventListener('transitionend', this.removeAnimationEndListener_.bind(this));
+        content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_.bind(this));
       }
     });
   </script>

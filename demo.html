@@ -9,31 +9,83 @@
   <link rel="import" href="../iron-label/iron-label.html">
   <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
   <link rel="import" href="at-core-dropdown.html">
-  <style media="screen">
+  <link rel="import" href="../at-theme/at-theme.html">
+  <style>
+    html * {
+      box-sizing: border-box;
+    }
+
     .relative-container {
+      margin-left: 50px;
+      margin-top: 250px;
       position: relative;
+      flex: 1;
     }
   </style>
 </head>
 
 <body>
-  <div class="relative-container">
-    <at-carbon-icon-button id="carbonButton" icon="now:menu"></at-carbon-icon-button>
-    <at-core-dropdown id="coreDropdown" opens="bottomDown">
-      <iron-label>Item 1</iron-label>
-      <iron-label>Item 2</iron-label>
-      <iron-label>Item 3</iron-label>
-      <iron-label>Item 4</iron-label>
-    </at-core-dropdown>
+  <div class="horizontal layout">
+    <div class="relative-container">
+      <h4>Dropdown position is bottom left</h4>
+      <at-carbon-icon-button id="carbonButton1" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown1" position="bottomLeft">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+        <div>Item 4</div>
+      </at-core-dropdown>
+    </div>
+
+    <div class="relative-container">
+      <h4>Dropdown position is bottom right</h4>
+      <at-carbon-icon-button id="carbonButton2" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown2" position="bottomRight">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+        <div>Item 4</div>
+      </at-core-dropdown>
+    </div>
+
+    <div class="relative-container">
+      <h4>Dropdown position is top left</h4>
+      <at-carbon-icon-button id="carbonButton3" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown3" position="topLeft">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+        <div>Item 4</div>
+      </at-core-dropdown>
+    </div>
+
+    <div class="relative-container">
+      <h4>Dropdown position is top right</h4>
+      <at-carbon-icon-button id="carbonButton4" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown4" position="topRight">
+        <div>Item 1</div>
+        <div>Item 2</div>
+        <div>Item 3</div>
+        <div>Item 4</div>
+      </at-core-dropdown>
+    </div>
   </div>
+
   <script>
     document.addEventListener('WebComponentsReady', function(event) {
-      var carbonButton = document.getElementById('carbonButton');
-      var coreDropdown = document.getElementById('coreDropdown');
+      init('carbonButton1', 'coreDropdown1');
+      init('carbonButton2', 'coreDropdown2');
+      init('carbonButton3', 'coreDropdown3');
+      init('carbonButton4', 'coreDropdown4');
 
-      carbonButton.addEventListener('tap', function(event) {
-        coreDropdown.toggle(carbonButton, event);
-      });
+      function init(buttonId, dropdownId) {
+        var carbonButton = document.getElementById(buttonId);
+        var coreDropdown = document.getElementById(dropdownId);
+
+        carbonButton.addEventListener('click', function(event) {
+          coreDropdown.toggle(carbonButton, event);
+        });
+      }
     });
   </script>
 </body>
