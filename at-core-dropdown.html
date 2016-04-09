@@ -5,6 +5,10 @@
   <template>
     <style include="at-form-common"></style>
     <style>
+      :host {
+        position: relative;
+      }
+
       .relative-container-inner {
         position: relative;
       }
@@ -323,6 +327,7 @@
           // Position below the "for" element, aligned to its right.
           container.style.right = (forRect.right - rect.right) + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
+          container.style.bottom = '';
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
           container.style.left = relativeTo.offsetLeft + 'px';
@@ -335,6 +340,7 @@
           // Default: position below the "for" element, aligned to its left.
           container.style.left = relativeTo.offsetLeft + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
+          container.style.bottom = '';
         }
       },
       show: function(evt) {
