@@ -201,6 +201,9 @@
         var result = found !== undefined;
         return result;
       },
+      isOpen: function () {
+        return this._isOpen;
+      },
       positionChanged: function(newValue, oldValue) {
         if (this._isPositionValueValid(newValue)) {
           var content = this.$.content;
@@ -282,46 +285,50 @@
         // Apply the initial clip to the text before we start animating.
         this.applyClip_(height, width);
 
-        // Wait for the next frame, turn on animation, and apply the final clip.
+        // Turn on animation, and apply the final clip.
         // Also make it visible. This triggers the transitions.
+        this._requestAnimationFrameEnded = false;
         requestAnimationFrame(function() {
           Polymer.dom(content).classList.add(this.CssClasses_.IS_ANIMATING);
           content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
           Polymer.dom(container).classList.add(this.CssClasses_.IS_VISIBLE);
+          this._requestAnimationFrameEnded = true;
         }.bind(this));
 
         // Clean up after the animation is complete.
         this.addAnimationEndListener_();
 
-        // Add a click listener to the document, to close the menu.
-        var callback = function(e) {
-          // Check to see if the document is processing the same event that
-          // displayed the menu in the first place. If so, do nothing.
-          // Also check to see if the menu is in the process of closing itself, and
-          // do nothing in that case.
-          // Also check if the clicked element is a menu item
-          // if so, do nothing.
-          if (e !== evt && !this.closing_ && e.target.parentNode !== content) {
-            document.removeEventListener('click', callback);
-            this.hide();
-          }
-        }.bind(this);
-        document.addEventListener('click', callback);
+        this._isOpen = true;
       },
       hide: function() {
         // Measure the inner element.
         var rect = this.$.content.getBoundingClientRect();
         var height = rect.height;
         var width = rect.width;
-
-        // Turn on animation, and apply the final clip. Also make invisible.
-        // This triggers the transitions.
-        Polymer.dom(this.$.content).classList.add(this.CssClasses_.IS_ANIMATING);
-        this.applyClip_(height, width);
-        Polymer.dom(this.$.container).classList.remove(this.CssClasses_.IS_VISIBLE);
+        var content = this.$.content;
+        var container = this.$.container;
+        var cssClasses = this.CssClasses_;
+        var self = this;
+        if (this._requestAnimationFrameEnded) {
+          // this._requestAnimationFrameEnded = false;
+          // Turn on animation, and apply the final clip. Also make invisible.
+          // This triggers the transitions.
+          Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
+          this.applyClip_(height, width);
+          Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
+        } else {
+          requestAnimationFrame(function() {
+            console.log('at-core-dropdown line 316 requestAnimationFrame called');
+            Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
+            self.applyClip_(height, width);
+            Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
+          });
+        }
 
         // Clean up after the animation is complete.
         this.addAnimationEndListener_();
+
+        this._isOpen = false;
       },
       applyClip_: function(height, width) {
         var content = this.$.content;
