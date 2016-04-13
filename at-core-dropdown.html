@@ -301,7 +301,6 @@
         var cssClasses = this.CssClasses_;
         var self = this;
         if (this._requestAnimationFrameEnded) {
-          // this._requestAnimationFrameEnded = false;
           // Turn on animation, and apply the final clip. Also make invisible.
           // This triggers the transitions.
           Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
@@ -309,7 +308,6 @@
           Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
         } else {
           requestAnimationFrame(function() {
-            console.log('at-core-dropdown line 316 requestAnimationFrame called');
             Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
             self.applyClip_(height, width);
             Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
