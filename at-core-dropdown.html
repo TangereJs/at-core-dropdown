@@ -186,10 +186,17 @@
       },
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
-        var found = list.find(function(item) {
-          return item.value === value;
-        });
-        var result = found !== undefined;
+        var found = false;
+        var listLength = list.length;
+        var listItem;
+        for (var i = 0; i < listLength; i++) {
+          listItem = list[i];
+          if (listItem.value === value) {
+            found = listItem;
+            break;
+          }
+        }
+        var result = found !== false;
         return result;
       },
       isOpen: function () {
