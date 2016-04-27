@@ -116,8 +116,32 @@
         top: auto;
         left: auto;
       }
+
+      #mask {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: transparent;
+        opacity: 0.3;       
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        z-index: 2;
+        -webkit-transition: opacity 0.3s ease-in-out;
+        -moz-transition: opacity 0.3s ease-in-out;
+        -ms-transition: opacity 0.3s ease-in-out;
+        -o-transition: opacity 0.3s ease-in-out;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      #mask.hidden {
+        display: none;
+      }
     </style>
     <div id="container" class="container">
+      <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
       <div id="content" class="content position--bottom-left">
         <content id="insertPoint"></content>
@@ -296,7 +320,16 @@
         // Clean up after the animation is complete.
         this.addAnimationEndListener_();
 
+        var mask = this.$.mask;
+        this.toggleClass('hidden', false, mask);
+
         this._isOpen = true;
+      },
+      _maskOnTap: function () {
+        var mask = this.$.mask;
+
+        this.toggleClass('hidden', true, mask);
+        this.hide();
       },
       hide: function() {
         // Measure the inner element.
