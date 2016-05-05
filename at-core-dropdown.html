@@ -82,7 +82,7 @@
         padding: 8px 0;
         margin: 0;
         opacity: 0;
-        clip: rect(0 0 0 0);
+        /*clip: rect(0 0 0 0);*/
         z-index: -1;
       }
 
@@ -92,7 +92,7 @@
       }
 
       .content.is-animating {
-        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), clip 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1); /*, clip 0.3s cubic-bezier(0.4, 0, 0.2, 1);*/
       }
 
       .content.position--bottom-right {
@@ -125,7 +125,7 @@
         right: 0;
         bottom: 0;
         background-color: transparent;
-        opacity: 0.3;       
+        opacity: 0.3;
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         z-index: 2;
@@ -305,14 +305,14 @@
         var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
 
         // Apply the initial clip to the text before we start animating.
-        this.applyClip_(height, width);
+        // this.applyClip_(height, width);
 
         // Turn on animation, and apply the final clip.
         // Also make it visible. This triggers the transitions.
         this._requestAnimationFrameEnded = false;
         requestAnimationFrame(function() {
           Polymer.dom(content).classList.add(this.CssClasses_.IS_ANIMATING);
-          content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
+          // content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
           Polymer.dom(container).classList.add(this.CssClasses_.IS_VISIBLE);
           this._requestAnimationFrameEnded = true;
         }.bind(this));
@@ -344,12 +344,12 @@
           // Turn on animation, and apply the final clip. Also make invisible.
           // This triggers the transitions.
           Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
-          this.applyClip_(height, width);
+          // this.applyClip_(height, width);
           Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
         } else {
           requestAnimationFrame(function() {
             Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
-            self.applyClip_(height, width);
+            // self.applyClip_(height, width);
             Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
           });
         }
