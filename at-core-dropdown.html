@@ -92,7 +92,8 @@
       }
 
       .content.is-animating {
-        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1); /*, clip 0.3s cubic-bezier(0.4, 0, 0.2, 1);*/
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        /*, clip 0.3s cubic-bezier(0.4, 0, 0.2, 1);*/
       }
 
       .content.position--bottom-right {
@@ -171,6 +172,22 @@
             title: "Bottom Right",
             value: "bottomRight"
           }]
+        },
+        /**
+         * a css class to be added to each dropdown item
+         */
+        dropdownItemClass: {
+          type: String,
+          value: 'dropdown-item',
+          observer: 'dropdownItemClassChanged'
+        },
+        /**
+         * a css class to be added to the currently selected item
+         */
+        selectedItemClass: {
+          type: String,
+          value: 'selected-item',
+          observer: 'selectedItemClassChanged'
         }
       },
       ready: function() {
@@ -182,14 +199,6 @@
           // How long the menu stays open after choosing an option (so the user can see
           // the ripple).
           CLOSE_TIMEOUT: 150
-        };
-
-        this.Keycodes_ = {
-          ENTER: 13,
-          ESCAPE: 27,
-          SPACE: 32,
-          UP_ARROW: 38,
-          DOWN_ARROW: 40
         };
 
         this.CssClasses_ = {
@@ -223,7 +232,7 @@
         var result = found !== false;
         return result;
       },
-      isOpen: function () {
+      isOpen: function() {
         return this._isOpen;
       },
       positionChanged: function(newValue, oldValue) {
@@ -325,7 +334,7 @@
 
         this._isOpen = true;
       },
-      _maskOnTap: function () {
+      _maskOnTap: function() {
         var mask = this.$.mask;
 
         this.toggleClass('hidden', true, mask);
@@ -386,6 +395,112 @@
         var content = this.$.content;
         content.addEventListener('transitionend', this.removeAnimationEndListener_.bind(this));
         content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_.bind(this));
+      },
+      attached: function() {
+        if (!this.dropdownItemClass) {
+          return;
+        }
+        // add dropdownItemClass to each dropdown item
+        var dropdownItems = this.getEffectiveChildren();
+
+        for (var i = 0; i < dropdownItems.length; i++) {
+          var dropdownItem = dropdownItems[i];
+          Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
+        }
+
+        this._isAttached = true;
+      },
+      dropdownItemClassChanged: function(newValue, oldValue) {
+        if (!this._isAttached) {
+          return;
+        }
+        // update dropdownItemClass for each dropdown item
+        var dropdownItems = this.getEffectiveChildren();
+
+        for (var i = 0; i < dropdownItems.length; i++) {
+          var dropdownItem = dropdownItems[i];
+          Polymer.dom(dropdownItem).classList.remove(oldValue);
+          Polymer.dom(dropdownItem).classList.add(newValue);
+        }
+      },
+      selectedItemClassChanged: function(newValue, oldValue) {
+        if (!this._isAttached) {
+          return;
+        }
+        // update selectedItemClass for each dropdown item
+        var selectedChild = this.queryEffectiveChildren("." + oldValue);
+        if (!selectedChild) {
+          return;
+        }
+        Polymer.dom(selectedChild).classList.remove(oldValue);
+        Polymer.dom(selectedChild).classList.add(newValue);
+      },
+      // gets currently selected item
+      selectedItem: function() {
+        if (this.selectedItemClass === "") {
+          return null;
+        }
+        var selectedChild = this.queryEffectiveChildren("." + this.selectedItemClass);
+        return selectedChild;
+      },
+      // selects next item in the dropdown
+      selectNext: function() {
+        if (this.selectedItemClass === "") {
+          return;
+        }
+        var selected = this.selectedItem();
+
+        if (!selected) {
+          // select first in the list
+          var dropdownItems = this.getEffectiveChildren();
+          if (dropdownItems.length > 0) {
+            next = dropdownItems[0];
+            Polymer.dom(next).classList.add(this.selectedItemClass);
+          }
+        } else {
+          Polymer.dom(selected).classList.remove(this.selectedItemClass);
+
+          var next = Polymer.dom(selected).nextElementSibling;
+          if (next) {
+            Polymer.dom(next).classList.add(this.selectedItemClass);
+          } else {
+            // select first in the list
+            var dropdownItems = this.getEffectiveChildren();
+            if (dropdownItems.length > 0) {
+              next = dropdownItems[0];
+              Polymer.dom(next).classList.add(this.selectedItemClass);
+            }
+          }
+        }
+      },
+      // selects previous item in the dropdown
+      selectPrevious: function() {
+        if (this.selectedItemClass === "") {
+          return;
+        }
+
+        var selected = this.selectedItem();
+        if (!selected) {
+          // select the last in the list
+          var dropdownItems = this.getEffectiveChildren();
+          if (dropdownItems.length > 0) {
+            previous = dropdownItems[dropdownItems.length - 1];
+            Polymer.dom(previous).classList.add(this.selectedItemClass);
+          }
+        } else {
+          Polymer.dom(selected).classList.remove(this.selectedItemClass);
+          var previous = Polymer.dom(selected).previousElementSibling;
+          if (previous) {
+            Polymer.dom(previous).classList.add(this.selectedItemClass);
+          } else {
+            // select the last in the list
+            var dropdownItems = this.getEffectiveChildren();
+            if (dropdownItems.length > 0) {
+              previous = dropdownItems[dropdownItems.length - 1];
+              Polymer.dom(previous).classList.add(this.selectedItemClass);
+            }
+          }
+        }
       }
     });
   </script>
