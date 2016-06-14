@@ -147,10 +147,6 @@
         @apply(--at-form-label-font);
       }
 
-      .dropdown-item:hover {
-        @apply(--at-text-primary-selected);
-      }
-
       .dropdown-item.selected-item {
         @apply(--at-text-primary-selected);
       }
@@ -248,13 +244,13 @@
           if (keyCode === self._KeyCodes.KEY_ESC) {
             self.hide();
           } else if (keyCode === self._KeyCodes.KEY_TAB) {
-            // do nothing
+            // self.hide();
           } else if (keyCode === self._KeyCodes.KEY_ARROW_UP) {
-            self.selectPrevious();
+            // self.selectPrevious();
           } else if (keyCode === self._KeyCodes.KEY_ARROW_DOWN) {
-            self.selectNext();
+            // self.selectNext();
           } else if (keyCode === self._KeyCodes.KEY_ENTER) {
-            self.hide();
+            // self.hide();
           }
         });
       },
@@ -374,7 +370,7 @@
         this.toggleClass('hidden', false, mask);
 
         this._isOpen = true;
-        this.focus();
+        // this.focus();
       },
       _maskOnTap: function() {
         var mask = this.$.mask;
@@ -444,11 +440,37 @@
         }
         // add dropdownItemClass to each dropdown item
         var dropdownItems = this.getEffectiveChildren();
-
+        var self = this;
         for (var i = 0; i < dropdownItems.length; i++) {
           var dropdownItem = dropdownItems[i];
-          Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
-          Polymer.dom(dropdownItem).classList.add("at-core-dropdown");
+          // Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
+          // Polymer.dom(dropdownItem).classList.add("at-core-dropdown");
+          // *ij* 14.06.2016 (dd.mm.yyyy)
+          // quick testing shows that 'tap' event doens't work for effective children inside core-dropdown
+          // it should work outside core-dropdown, but 'click' event works
+          // After reviewing paper-menu and paper-item one concludes that paper-menu handles click and paper-item handles tap
+          // dropdownItem.addEventListener('click', function(event) {
+          //   var target = event.target;
+          //   var selectedItem = self.selectedItem();
+          //   if (selectedItem) {
+          //     Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
+          //   }
+          //   Polymer.dom(target).classList.add(self.selectedItemClass);
+          //   self.hide();
+          // });
+          // dropdownItem.addEventListener('keydown', function(event) {
+          //   var target = event.target;
+          //   var keyCode = event.which;
+          //
+          //   if (keyCode !== 13) { return ; }
+          //
+          //     var selectedItem = self.selectedItem();
+          //     if (selectedItem) {
+          //       Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
+          //     }
+          //     Polymer.dom(target).classList.add(self.selectedItemClass);
+          //     self.hide();
+          // });
         }
 
         this._isAttached = true;

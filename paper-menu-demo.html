@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>paper-menu demo</title>
+  <script src="../webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
+  <link rel="import" href="../polymer/polymer.html">
+  <link rel="import" href="../paper-menu/paper-menu.html">
+  <link rel="import" href="at-core-dropdown.html">
+  <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
+</head>
+
+<body>
+  <div>
+    <div class="">
+      <div class="">
+        <h3>paper-menu demo</h3>
+        <ul>
+          <li>provides styling for itself</li>
+          <li>provides <b>iron-selected</b> css class for items that are tapped/clicked on</li>
+          <li>provides focus handling for itself; user can TAB into paper-menu</li>
+          <li>once paper-menu has keyboard focus, user can cycle through items with ARROW keys</li>
+          <li>selecting "items" with enter or space doesn't work; paper-item does this</li>
+          <li>closing the dropdown with ESC is very difficult; paper-menu needs focus to handle ARROW keys but also stops bubbling of keyboard events, so core-dropdown can not close itself with ECS because paper-menu intercepts ECS key</li>
+          <li>the same holds true for ENTER key where we want to select the item and close the dropdown in one step</li>
+        </ul>
+      </div>
+    </div>
+    <div class="relative-container">
+      <h4>Dropdown position is bottom left</h4>
+      <at-carbon-icon-button id="carbonButton1" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown1" position="bottomLeft">
+        <paper-menu>
+          <div>Item 1</div>
+          <div>Item 2</div>
+          <div>Item 3</div>
+          <div>Item 4</div>
+        </paper-menu>
+      </at-core-dropdown>
+    </div>
+  </div>
+  <script>
+    (function() {
+      'use strict';
+      document.addEventListener('WebComponentsReady', function(event) {
+        var carbonButton1 = document.getElementById('carbonButton1');
+        var coreDropdown1 = document.getElementById('coreDropdown1');
+
+        carbonButton1.addEventListener('tap', function(event) {
+          coreDropdown1.toggle(carbonButton1, event);
+        });
+      });
+    }());
+  </script>
+</body>
+
+</html>
