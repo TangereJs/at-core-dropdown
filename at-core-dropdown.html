@@ -140,6 +140,20 @@
       #mask.hidden {
         display: none;
       }
+
+      .dropdown-item {
+        padding: 6px 12px;
+        cursor: pointer;
+        @apply(--at-form-label-font);
+      }
+
+      .dropdown-item:hover {
+        @apply(--at-text-primary-selected);
+      }
+
+      .dropdown-item.selected-item {
+        @apply(--at-text-primary-selected);
+      }
     </style>
     <div id="container" class="container">
       <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
@@ -153,6 +167,9 @@
     'use strict';
     Polymer({
       is: 'at-core-dropdown',
+      hostAttributes: {
+        tabIndex: 0
+      },
       properties: {
         position: {
           type: String,
@@ -190,6 +207,13 @@
           observer: 'selectedItemClassChanged'
         }
       },
+      _KeyCodes: {
+        KEY_ESC: 27,
+        KEY_TAB: 9,
+        KEY_ARROW_UP: 38,
+        KEY_ARROW_DOWN: 40,
+        KEY_ENTER: 13
+      },
       ready: function() {
         this.Constant_ = {
           // Total duration of the menu animation.
@@ -216,6 +240,23 @@
           TOP_RIGHT: 'position--top-right',
           UNALIGNED: 'position--unaligned'
         };
+
+        var self = this;
+        this.addEventListener('keydown', function(event) {
+          var keyCode = event.which;
+
+          if (keyCode === self._KeyCodes.KEY_ESC) {
+            self.hide();
+          } else if (keyCode === self._KeyCodes.KEY_TAB) {
+            // do nothing
+          } else if (keyCode === self._KeyCodes.KEY_ARROW_UP) {
+            self.selectPrevious();
+          } else if (keyCode === self._KeyCodes.KEY_ARROW_DOWN) {
+            self.selectNext();
+          } else if (keyCode === self._KeyCodes.KEY_ENTER) {
+            self.hide();
+          }
+        });
       },
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
@@ -333,6 +374,7 @@
         this.toggleClass('hidden', false, mask);
 
         this._isOpen = true;
+        this.focus();
       },
       _maskOnTap: function() {
         var mask = this.$.mask;
@@ -406,6 +448,7 @@
         for (var i = 0; i < dropdownItems.length; i++) {
           var dropdownItem = dropdownItems[i];
           Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
+          Polymer.dom(dropdownItem).classList.add("at-core-dropdown");
         }
 
         this._isAttached = true;
