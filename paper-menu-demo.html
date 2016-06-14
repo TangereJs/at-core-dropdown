@@ -10,12 +10,21 @@
   <link rel="import" href="../paper-menu/paper-menu.html">
   <link rel="import" href="at-core-dropdown.html">
   <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
+  <style media="screen">
+    fieldset {
+      border: none;
+    }
+
+    fieldset legend {
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
   <div>
-    <div class="">
-      <div class="">
+    <div>
+      <div>
         <h3>paper-menu demo</h3>
         <ul>
           <li>provides styling for itself</li>
@@ -26,6 +35,74 @@
           <li>closing the dropdown with ESC is very difficult; paper-menu needs focus to handle ARROW keys but also stops bubbling of keyboard events, so core-dropdown can not close itself with ECS because paper-menu intercepts ECS key</li>
           <li>the same holds true for ENTER key where we want to select the item and close the dropdown in one step</li>
         </ul>
+      </div>
+      <div>
+        <h3>What elements we need</h3>
+        <ul>
+          <li>dropdown-trigger - should handle toggling of the dropdown with click/tap/keyboard (TAB/ENTER/SPACE)</li>
+          <li>dropdown - should handle show/hide of the content</li>
+          <li>menu - should contain menu items, provide keyboard handling for ARROW keys, and ESC, ENTER, SPACE, TAB key and contain some kind of reference to the currently selected item</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What we want</h3>
+        <fieldset>
+          <legend>dropdown-trigger</legend>
+          <ul>
+            <li>dropdown-trigger should respond to TAB key - for this dropdown-trigger needs tabIndex</li>
+            <li>user should be able to toggle the dropdown; toggle should work with click/tap and ENTER/SPACE keys</li>
+          </ul>
+          <div>
+            Right now, at-carbon-icon-button provides all of the above
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>dropdown</legend>
+          <ol>
+            <li>should have html/css/javascript for showing and hiding its content; it should provide an API for this (toggle, show, hide, etc functions)</li>
+            <li>dropdown should be closed when user selects an item from the menu (via click/tap or ENTER/SPACE) or presses the ESC key</li>
+            <li>we do not want dropdown to have tabIndex because we want to transfer focus to menu that dropdown contains so keyboard input is immidiately available to menu</li>
+          </ol>
+          <div>
+            1. Right now, at-core-dropdown has needed html/css/javascript.
+          </div>
+          <div>
+            2. Right now its impossible to close the dropdown when user selects an item form the menu with click/tap or ESC/TAB/SPACE/ENTER. Menu doesn't have any knowledge of the dropdown and dropdown doesn't have any knowledge of the menu.
+            This can be solved with menu having a reference to its 'dropdown' parent so it can hide its parent when necessary
+          </div>
+          <div>
+            3. Also, when dropdown opens we want to transfer keyboard focus to menu. One solution is for dropdown to have reference to its menu child. WHen dropdown opens it transfers focus to menu.
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>menu</legend>
+          <ol>
+            <li>menu contains menu items, provides keyboard handling for ARROW keys because we want items to be highlighted with arrow keys</li>
+            <li>and SPACE/ENTER keys - we want items to be selected with these keys</li>
+            <li>menu should select current item and close itself on TAB out </li>
+          </ol>
+          <div>
+            1. paper-menu provides this
+          </div>
+          <div>
+            2. paper menu doesn't provide this, this needs to be programmed in
+          </div>
+          <div>
+            3. paper menu doesn't support this
+          </div>
+          <div>
+            4. paper-menu doesn't support closing the dropdown when item is selected with click/tap/ENTER/SPACE or TAB/ESC are pressed; this needs to be programmed in
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>menu-item</legend>
+          <ol>
+            <li>menu-item should have different css class when highlighted (but not selected) and different one when selected</li>
+          </ol>
+          <div>
+            1. currently this infrastructure is programmed into at-core-dropdown
+          </div>
+        </fieldset>
       </div>
     </div>
     <div class="relative-container">
