@@ -208,7 +208,8 @@
         KEY_TAB: 9,
         KEY_ARROW_UP: 38,
         KEY_ARROW_DOWN: 40,
-        KEY_ENTER: 13
+        KEY_ENTER: 13,
+        KEY_SPACE: 32
       },
       ready: function() {
         this.Constant_ = {
@@ -244,13 +245,13 @@
           if (keyCode === self._KeyCodes.KEY_ESC) {
             self.hide();
           } else if (keyCode === self._KeyCodes.KEY_TAB) {
-            // self.hide();
+            self.hide();
           } else if (keyCode === self._KeyCodes.KEY_ARROW_UP) {
-            // self.selectPrevious();
+            self.selectPrevious();
           } else if (keyCode === self._KeyCodes.KEY_ARROW_DOWN) {
-            // self.selectNext();
-          } else if (keyCode === self._KeyCodes.KEY_ENTER) {
-            // self.hide();
+            self.selectNext();
+          } else if (keyCode === self._KeyCodes.KEY_ENTER || keyCode === self._KeyCodes.KEY_SPACE) {
+            self.hide();
           }
         });
       },
@@ -443,34 +444,34 @@
         var self = this;
         for (var i = 0; i < dropdownItems.length; i++) {
           var dropdownItem = dropdownItems[i];
-          // Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
-          // Polymer.dom(dropdownItem).classList.add("at-core-dropdown");
+          Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
+          Polymer.dom(dropdownItem).classList.add("at-core-dropdown");
           // *ij* 14.06.2016 (dd.mm.yyyy)
           // quick testing shows that 'tap' event doens't work for effective children inside core-dropdown
           // it should work outside core-dropdown, but 'click' event works
           // After reviewing paper-menu and paper-item one concludes that paper-menu handles click and paper-item handles tap
-          // dropdownItem.addEventListener('click', function(event) {
-          //   var target = event.target;
-          //   var selectedItem = self.selectedItem();
-          //   if (selectedItem) {
-          //     Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
-          //   }
-          //   Polymer.dom(target).classList.add(self.selectedItemClass);
-          //   self.hide();
-          // });
-          // dropdownItem.addEventListener('keydown', function(event) {
-          //   var target = event.target;
-          //   var keyCode = event.which;
-          //
-          //   if (keyCode !== 13) { return ; }
-          //
-          //     var selectedItem = self.selectedItem();
-          //     if (selectedItem) {
-          //       Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
-          //     }
-          //     Polymer.dom(target).classList.add(self.selectedItemClass);
-          //     self.hide();
-          // });
+          dropdownItem.addEventListener('click', function(event) {
+            var target = event.target;
+            var selectedItem = self.selectedItem();
+            if (selectedItem) {
+              Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
+            }
+            Polymer.dom(target).classList.add(self.selectedItemClass);
+            self.hide();
+          });
+          dropdownItem.addEventListener('keydown', function(event) {
+            var target = event.target;
+            var keyCode = event.which;
+
+            if (keyCode !== 13) { return ; }
+
+              var selectedItem = self.selectedItem();
+              if (selectedItem) {
+                Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
+              }
+              Polymer.dom(target).classList.add(self.selectedItemClass);
+              self.hide();
+          });
         }
 
         this._isAttached = true;
