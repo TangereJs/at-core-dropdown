@@ -164,7 +164,7 @@
     Polymer({
       is: 'at-core-dropdown',
       hostAttributes: {
-        tabIndex: 0
+        tabindex: -1
       },
       properties: {
         position: {
@@ -185,31 +185,7 @@
             title: "Bottom Right",
             value: "bottomRight"
           }]
-        },
-        /**
-         * a css class to be added to each dropdown item
-         */
-        dropdownItemClass: {
-          type: String,
-          value: 'dropdown-item',
-          observer: 'dropdownItemClassChanged'
-        },
-        /**
-         * a css class to be added to the currently selected item
-         */
-        selectedItemClass: {
-          type: String,
-          value: 'selected-item',
-          observer: 'selectedItemClassChanged'
         }
-      },
-      _KeyCodes: {
-        KEY_ESC: 27,
-        KEY_TAB: 9,
-        KEY_ARROW_UP: 38,
-        KEY_ARROW_DOWN: 40,
-        KEY_ENTER: 13,
-        KEY_SPACE: 32
       },
       ready: function() {
         this.Constant_ = {
@@ -237,23 +213,6 @@
           TOP_RIGHT: 'position--top-right',
           UNALIGNED: 'position--unaligned'
         };
-
-        var self = this;
-        this.addEventListener('keydown', function(event) {
-          var keyCode = event.which;
-
-          if (keyCode === self._KeyCodes.KEY_ESC) {
-            self.hide();
-          } else if (keyCode === self._KeyCodes.KEY_TAB) {
-            self.hide();
-          } else if (keyCode === self._KeyCodes.KEY_ARROW_UP) {
-            self.selectPrevious();
-          } else if (keyCode === self._KeyCodes.KEY_ARROW_DOWN) {
-            self.selectNext();
-          } else if (keyCode === self._KeyCodes.KEY_ENTER || keyCode === self._KeyCodes.KEY_SPACE) {
-            self.hide();
-          }
-        });
       },
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
@@ -434,139 +393,6 @@
         var content = this.$.content;
         content.addEventListener('transitionend', this.removeAnimationEndListener_.bind(this));
         content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_.bind(this));
-      },
-      attached: function() {
-        if (!this.dropdownItemClass) {
-          return;
-        }
-        // add dropdownItemClass to each dropdown item
-        var dropdownItems = this.getEffectiveChildren();
-        var self = this;
-        for (var i = 0; i < dropdownItems.length; i++) {
-          var dropdownItem = dropdownItems[i];
-          Polymer.dom(dropdownItem).classList.add(this.dropdownItemClass);
-          Polymer.dom(dropdownItem).classList.add("at-core-dropdown");
-          // *ij* 14.06.2016 (dd.mm.yyyy)
-          // quick testing shows that 'tap' event doens't work for effective children inside core-dropdown
-          // it should work outside core-dropdown, but 'click' event works
-          // After reviewing paper-menu and paper-item one concludes that paper-menu handles click and paper-item handles tap
-          dropdownItem.addEventListener('click', function(event) {
-            var target = event.target;
-            var selectedItem = self.selectedItem();
-            if (selectedItem) {
-              Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
-            }
-            Polymer.dom(target).classList.add(self.selectedItemClass);
-            self.hide();
-          });
-          dropdownItem.addEventListener('keydown', function(event) {
-            var target = event.target;
-            var keyCode = event.which;
-
-            if (keyCode !== 13) { return ; }
-
-              var selectedItem = self.selectedItem();
-              if (selectedItem) {
-                Polymer.dom(selectedItem).classList.remove(self.selectedItemClass);
-              }
-              Polymer.dom(target).classList.add(self.selectedItemClass);
-              self.hide();
-          });
-        }
-
-        this._isAttached = true;
-      },
-      dropdownItemClassChanged: function(newValue, oldValue) {
-        if (!this._isAttached) {
-          return;
-        }
-        // update dropdownItemClass for each dropdown item
-        var dropdownItems = this.getEffectiveChildren();
-
-        for (var i = 0; i < dropdownItems.length; i++) {
-          var dropdownItem = dropdownItems[i];
-          Polymer.dom(dropdownItem).classList.remove(oldValue);
-          Polymer.dom(dropdownItem).classList.add(newValue);
-        }
-      },
-      selectedItemClassChanged: function(newValue, oldValue) {
-        if (!this._isAttached) {
-          return;
-        }
-        // update selectedItemClass for each dropdown item
-        var selectedChild = this.queryEffectiveChildren("." + oldValue);
-        if (!selectedChild) {
-          return;
-        }
-        Polymer.dom(selectedChild).classList.remove(oldValue);
-        Polymer.dom(selectedChild).classList.add(newValue);
-      },
-      // gets currently selected item
-      selectedItem: function() {
-        if (this.selectedItemClass === "") {
-          return null;
-        }
-        var selectedChild = this.queryEffectiveChildren("." + this.selectedItemClass);
-        return selectedChild;
-      },
-      // selects next item in the dropdown
-      selectNext: function() {
-        if (this.selectedItemClass === "") {
-          return;
-        }
-        var selected = this.selectedItem();
-
-        if (!selected) {
-          // select first in the list
-          var dropdownItems = this.getEffectiveChildren();
-          if (dropdownItems.length > 0) {
-            next = dropdownItems[0];
-            Polymer.dom(next).classList.add(this.selectedItemClass);
-          }
-        } else {
-          Polymer.dom(selected).classList.remove(this.selectedItemClass);
-
-          var next = Polymer.dom(selected).nextElementSibling;
-          if (next) {
-            Polymer.dom(next).classList.add(this.selectedItemClass);
-          } else {
-            // select first in the list
-            var dropdownItems = this.getEffectiveChildren();
-            if (dropdownItems.length > 0) {
-              next = dropdownItems[0];
-              Polymer.dom(next).classList.add(this.selectedItemClass);
-            }
-          }
-        }
-      },
-      // selects previous item in the dropdown
-      selectPrevious: function() {
-        if (this.selectedItemClass === "") {
-          return;
-        }
-
-        var selected = this.selectedItem();
-        if (!selected) {
-          // select the last in the list
-          var dropdownItems = this.getEffectiveChildren();
-          if (dropdownItems.length > 0) {
-            previous = dropdownItems[dropdownItems.length - 1];
-            Polymer.dom(previous).classList.add(this.selectedItemClass);
-          }
-        } else {
-          Polymer.dom(selected).classList.remove(this.selectedItemClass);
-          var previous = Polymer.dom(selected).previousElementSibling;
-          if (previous) {
-            Polymer.dom(previous).classList.add(this.selectedItemClass);
-          } else {
-            // select the last in the list
-            var dropdownItems = this.getEffectiveChildren();
-            if (dropdownItems.length > 0) {
-              previous = dropdownItems[dropdownItems.length - 1];
-              Polymer.dom(previous).classList.add(this.selectedItemClass);
-            }
-          }
-        }
       }
     });
   </script>
