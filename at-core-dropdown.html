@@ -140,16 +140,6 @@
       #mask.hidden {
         display: none;
       }
-
-      .dropdown-item {
-        padding: 6px 12px;
-        cursor: pointer;
-        @apply(--at-form-label-font);
-      }
-
-      .dropdown-item.selected-item {
-        @apply(--at-text-primary-selected);
-      }
     </style>
     <div id="container" class="container">
       <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
@@ -332,7 +322,7 @@
         this._isOpen = true;
         // this.focus();
       },
-      _maskOnTap: function() {
+      _maskOnTap: function(event) {
         var mask = this.$.mask;
 
         this.toggleClass('hidden', true, mask);
