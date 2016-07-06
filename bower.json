@@ -1,6 +1,6 @@
 {
   "name": "at-core-dropdown",
-  "version": "1.0.0.14",
+  "version": "1.0.0.15",
   "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#master",
