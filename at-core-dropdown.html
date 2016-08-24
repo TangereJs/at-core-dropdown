@@ -86,6 +86,10 @@
         z-index: -1;
       }
 
+      .content.hidden {
+        display: none;
+      }
+
       .container.is-visible .content {
         opacity: 1;
         z-index: 999;
@@ -144,7 +148,7 @@
     <div id="container" class="container">
       <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
-      <div id="content" class="content position--bottom-left">
+      <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
         <content id="insertPoint"></content>
       </div>
     </div>
@@ -224,7 +228,7 @@
       },
       positionChanged: function(newValue, oldValue) {
         if (this._isPositionValueValid(newValue)) {
-          var content = this.$.content;
+          var content = this.$.atCoreDropdownContent;
           var outline = this.$.outline;
           // update css class
           var classPrefix = 'position--';
@@ -258,7 +262,7 @@
       _updateDropdownPosition: function(relativeTo) {
         var rect = relativeTo.getBoundingClientRect();
         var forRect = relativeTo.parentElement.getBoundingClientRect();
-        var content = this.$.content;
+        var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
         if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
           // Do not position the menu automatically. Requires the developer to
@@ -284,7 +288,7 @@
         }
       },
       show: function(evt) {
-        var content = this.$.content;
+        var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
         var outline = this.$.outline;
 
@@ -318,6 +322,7 @@
 
         var mask = this.$.mask;
         this.toggleClass('hidden', false, mask);
+        this.toggleClass('hidden', false, content);
 
         this._isOpen = true;
         // this.focus();
@@ -326,14 +331,16 @@
         var mask = this.$.mask;
 
         this.toggleClass('hidden', true, mask);
+        var content = this.$.atCoreDropdownContent;
+        this.toggleClass('hidden', true, content);
         this.hide();
       },
       hide: function() {
         // Measure the inner element.
-        var rect = this.$.content.getBoundingClientRect();
+        var rect = this.$.atCoreDropdownContent.getBoundingClientRect();
         var height = rect.height;
         var width = rect.width;
-        var content = this.$.content;
+        var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
         var cssClasses = this.CssClasses_;
         var self = this;
@@ -357,7 +364,7 @@
         this._isOpen = false;
       },
       applyClip_: function(height, width) {
-        var content = this.$.content;
+        var content = this.$.atCoreDropdownContent;
         if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
           // Do not clip.
           content.style.clip = '';
@@ -380,7 +387,7 @@
         Polymer.dom(evt.target).classList.remove(this.CssClasses_.IS_ANIMATING);
       },
       addAnimationEndListener_: function() {
-        var content = this.$.content;
+        var content = this.$.atCoreDropdownContent;
         content.addEventListener('transitionend', this.removeAnimationEndListener_.bind(this));
         content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_.bind(this));
       }
