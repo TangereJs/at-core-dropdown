@@ -287,7 +287,7 @@
           container.style.bottom = '';
         }
       },
-      show: function(evt) {
+      show: function(evt, relativeTo) {
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
         var outline = this.$.outline;
@@ -295,6 +295,10 @@
         // Measure the inner element.
         var height = content.getBoundingClientRect().height;
         var width = content.getBoundingClientRect().width;
+
+        if (relativeTo) {
+          this._updateDropdownPosition(relativeTo);
+        }
 
         // Apply the inner element's size to the container and outline.
         container.style.width = width + 'px';
