@@ -292,6 +292,8 @@
         var container = this.$.container;
         var outline = this.$.outline;
 
+        this.toggleClass('hidden', false, content);
+
         // Measure the inner element.
         var height = content.getBoundingClientRect().height;
         var width = content.getBoundingClientRect().width;
@@ -326,7 +328,7 @@
 
         var mask = this.$.mask;
         this.toggleClass('hidden', false, mask);
-        this.toggleClass('hidden', false, content);
+
 
         this._isOpen = true;
         // this.focus();
