@@ -6,15 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>paper-menu demo</title>
   <script src="../webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
-  <link rel="import" href="../polymer/polymer.html">
-  <link rel="import" href="../paper-menu/paper-menu.html">
   <link rel="import" href="at-core-dropdown.html">
+  <link rel="import" href="../paper-menu/paper-menu.html">
   <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
   <style media="screen">
     fieldset {
       border: none;
     }
-
+    
     fieldset legend {
       font-weight: bold;
     }
@@ -67,8 +66,8 @@
             1. Right now, at-core-dropdown has needed html/css/javascript.
           </div>
           <div>
-            2. Right now its impossible to close the dropdown when user selects an item form the menu with click/tap or ESC/TAB/SPACE/ENTER. Menu doesn't have any knowledge of the dropdown and dropdown doesn't have any knowledge of the menu.
-            This can be solved with menu having a reference to its 'dropdown' parent so it can hide its parent when necessary
+            2. Right now its impossible to close the dropdown when user selects an item form the menu with click/tap or ESC/TAB/SPACE/ENTER. Menu doesn't have any knowledge of the dropdown and dropdown doesn't have any knowledge of the menu. This can be solved with
+            menu having a reference to its 'dropdown' parent so it can hide its parent when necessary
           </div>
           <div>
             3. Also, when dropdown opens we want to transfer keyboard focus to menu. One solution is for dropdown to have reference to its menu child. WHen dropdown opens it transfers focus to menu.

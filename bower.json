@@ -3,8 +3,9 @@
   "version": "1.0.0.31",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#master",
+    "tangere": "TangereJs/tangere#0.8-preview",
     "at-theme": "TangereJs/at-theme#0.8-preview",
-    "at-carbon-icon-button": "TangereJs/at-carbon-icon-button#0.8-preview"
+    "at-carbon-icon-button": "TangereJs/at-carbon-icon-button#0.8-preview",
+    "paper-menu": "PolymerElements/paper-menu#master"
   }
 }
