@@ -179,6 +179,14 @@
             title: "Bottom Right",
             value: "bottomRight"
           }]
+        },
+        xOffset: {
+          type: Number,
+          value: 0
+        },
+        yOffset: {
+          type: Number,
+          value: 0
         }
       },
       ready: function() {
@@ -264,27 +272,54 @@
         var forRect = relativeTo.parentElement.getBoundingClientRect();
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
+
+        var xOffset = parseInt(this.xOffset);
+        if (window.isNaN(xOffset)) { xOffset = 0;}
+        var yOffset = parseInt(this.yOffset);
+        if (window.isNaN(yOffset)) { yOffset = 0; }
+
+        container.style.left = '';
+        container.style.right = '';
+        container.style.top = '';
+        container.style.bottom = '';
+
         if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
           // Do not position the menu automatically. Requires the developer to
           // manually specify position.
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
-          container.style.right = (forRect.right - rect.right) + 'px';
+          var rightVal = (forRect.right - rect.right) + xOffset;
+          container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
-          container.style.bottom = '';
+          if (yOffset) {
+            var bottomVal = yOffset;
+            container.style.bottom = bottomVal + 'px';
+          } else {
+            container.style.bottom = '';
+          }
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
-          container.style.left = relativeTo.offsetLeft + 'px';
-          container.style.bottom = (forRect.bottom - rect.top) + 'px';
+          var leftVal = relativeTo.offsetLeft + xOffset;
+          container.style.left = leftVal + 'px';
+          var bottomVal = (forRect.bottom - rect.top) + yOffset;
+          container.style.bottom = bottomVal + 'px';
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
-          container.style.right = (forRect.right - rect.right) + 'px';
-          container.style.bottom = (forRect.bottom - rect.top) + 'px';
+          var rightVal = (forRect.right - rect.right) + xOffset;
+          container.style.right = rightVal + 'px';
+          var bottomVal = (forRect.bottom - rect.top) + yOffset;
+          container.style.bottom = bottomVal + 'px';
         } else {
           // Default: position below the "for" element, aligned to its left.
-          container.style.left = relativeTo.offsetLeft + 'px';
+          var leftVal  = relativeTo.offsetLeft + xOffset;
+          container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
-          container.style.bottom = '';
+          if (yOffset) {
+            var bottomVal = yOffset;
+            container.style.bottom = bottomVal + 'px';
+          } else {
+            container.style.bottom = '';
+          }          
         }
       },
       show: function(evt, relativeTo) {
