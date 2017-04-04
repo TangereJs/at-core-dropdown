@@ -5,6 +5,16 @@
   <template>
     <style include="at-form-common"></style>
     <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      :host(:focus) {
+        outline: none;
+      }
+
       .container {
         display: block;
         margin: 0;
@@ -292,10 +302,10 @@
           container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var bottomVal = yOffset;
-            container.style.bottom = bottomVal + 'px';
+            var topVal = yOffset;
+            container.style.top = topVal + 'px';
           } else {
-            container.style.bottom = '';
+            container.style.top = '';
           }
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
@@ -315,10 +325,10 @@
           container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var bottomVal = yOffset;
-            container.style.bottom = bottomVal + 'px';
+            var topVal = yOffset;
+            container.style.top = topVal + 'px';
           } else {
-            container.style.bottom = '';
+            container.style.top = '';
           }          
         }
       },
