@@ -297,7 +297,7 @@
           // manually specify position.
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
-          var rightVal = (forRect.right - rect.right) + xOffset;
+          var rightVal = (forRect.right - rect.right) - xOffset;
           container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
@@ -310,13 +310,13 @@
           // Position above the "for" element, aligned to its left.
           var leftVal = relativeTo.offsetLeft + xOffset;
           container.style.left = leftVal + 'px';
-          var bottomVal = (forRect.bottom - rect.top) + yOffset;
+          var bottomVal = (forRect.bottom - rect.top) - yOffset;
           container.style.bottom = bottomVal + 'px';
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
-          var rightVal = (forRect.right - rect.right) + xOffset;
+          var rightVal = (forRect.right - rect.right) - xOffset;
           container.style.right = rightVal + 'px';
-          var bottomVal = (forRect.bottom - rect.top) + yOffset;
+          var bottomVal = (forRect.bottom - rect.top) - yOffset;
           container.style.bottom = bottomVal + 'px';
         } else {
           // Default: position below the "for" element, aligned to its left.
