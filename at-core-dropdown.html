@@ -198,33 +198,35 @@
           value: 0
         }
       },
-      ready: function() {
-        this.Constant_ = {
-          // Total duration of the menu animation.
-          TRANSITION_DURATION_SECONDS: 0.3,
-          // The fraction of the total duration we want to use for menu item animations.
-          TRANSITION_DURATION_FRACTION: 0.8,
-          // How long the menu stays open after choosing an option (so the user can see
-          // the ripple).
-          CLOSE_TIMEOUT: 150
-        };
 
-        this.CssClasses_ = {
-          CONTAINER: 'container',
-          OUTLINE: 'outline',
-          ITEM: 'item',
-          // Statuses
-          IS_UPGRADED: 'is-upgraded',
-          IS_VISIBLE: 'is-visible',
-          IS_ANIMATING: 'is-animating',
-          // Alignment options
-          BOTTOM_LEFT: 'position--bottom-left', // This is the default.
-          BOTTOM_RIGHT: 'position--bottom-right',
-          TOP_LEFT: 'position--top-left',
-          TOP_RIGHT: 'position--top-right',
-          UNALIGNED: 'position--unaligned'
-        };
+      Constant_: {
+        // Total duration of the menu animation.
+        TRANSITION_DURATION_SECONDS: 0.3,
+        // The fraction of the total duration we want to use for menu item animations.
+        TRANSITION_DURATION_FRACTION: 0.8,
+        // How long the menu stays open after choosing an option (so the user can see
+        // the ripple).
+        CLOSE_TIMEOUT: 150
       },
+
+      CssClasses_: {
+        CONTAINER: 'container',
+        OUTLINE: 'outline',
+        ITEM: 'item',
+        // Statuses
+        IS_UPGRADED: 'is-upgraded',
+        IS_VISIBLE: 'is-visible',
+        IS_ANIMATING: 'is-animating',
+        // Alignment options
+        BOTTOM_LEFT: 'position--bottom-left', // This is the default.
+        BOTTOM_RIGHT: 'position--bottom-right',
+        TOP_LEFT: 'position--top-left',
+        TOP_RIGHT: 'position--top-right',
+        UNALIGNED: 'position--unaligned'
+      },
+
+      ready: function() { },
+      
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
         var found = false;
