@@ -196,6 +196,21 @@
         yOffset: {
           type: Number,
           value: 0
+        },
+
+        /**
+         * True when dropdown is open, false otherwise
+         * set to true to open the dropdown, set to false to close it
+         * 
+         * @property open
+         * @type Boolean
+         * @default false
+         */
+        open: {
+          type: Boolean,
+          value: false,
+          observer: '_openChanged',
+          notify: true
         }
       },
 
@@ -242,6 +257,15 @@
         var result = found !== false;
         return result;
       },
+
+      _openChanged: function(newValue, oldValue) {
+        if (newValue) {
+          this.show();
+        } else {
+          this.hide();
+        }
+      },
+
       isOpen: function() {
         return this._isOpen;
       },
@@ -377,6 +401,7 @@
 
 
         this._isOpen = true;
+        this.open = true;
         // this.focus();
       },
       _maskOnTap: function(event) {
@@ -414,6 +439,7 @@
         this.addAnimationEndListener_();
 
         this._isOpen = false;
+        this.open = false;
       },
       applyClip_: function(height, width) {
         var content = this.$.atCoreDropdownContent;

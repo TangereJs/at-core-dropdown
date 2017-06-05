@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dropdown demo</title>
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="at-core-dropdown.html">
+  <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
+  <style>
+    html * {
+      box-sizing: border-box;
+    }
+
+    .relative-container {
+      margin-left: 50px;
+      margin-top: 250px;
+      position: relative;
+      flex: 1;
+    }
+
+    img {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="horizontal layout">
+    <div class="relative-container">
+      <h4>Dropdown position is bottom left</h4>
+      <at-carbon-icon-button id="carbonButton1" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown1" position="bottomLeft">
+        <img src="http://placehold.it/350x150">
+      </at-core-dropdown>
+    </div>
+
+    <div class="relative-container">
+      <h4>Dropdown position is bottom right</h4>
+      <at-carbon-icon-button id="carbonButton2" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown2" position="bottomRight">
+        <img src="http://placehold.it/350x150">
+      </at-core-dropdown>
+    </div>
+
+    <div class="relative-container">
+      <h4>Dropdown position is top left</h4>
+      <at-carbon-icon-button id="carbonButton3" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown3" position="topLeft">
+        <img src="http://placehold.it/350x150">
+      </at-core-dropdown>
+    </div>
+
+    <div class="relative-container">
+      <h4>Dropdown position is top right</h4>
+      <at-carbon-icon-button id="carbonButton4" icon="now:menu"></at-carbon-icon-button>
+      <at-core-dropdown id="coreDropdown4" position="topRight">
+        <img src="http://placehold.it/350x150">
+      </at-core-dropdown>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('WebComponentsReady', function(event) {
+      init('carbonButton1', 'coreDropdown1');
+      init('carbonButton2', 'coreDropdown2');
+      init('carbonButton3', 'coreDropdown3');
+      init('carbonButton4', 'coreDropdown4');
+
+      function init(buttonId, dropdownId) {
+        var carbonButton = document.getElementById(buttonId);
+        var coreDropdown = document.getElementById(dropdownId);
+
+        carbonButton.addEventListener('click', function(event) {
+          coreDropdown.toggle(carbonButton, event);
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

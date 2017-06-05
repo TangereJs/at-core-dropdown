@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>at-core-dropdown demo page</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../at-theme/at-theme.html" />
+  <link rel="import" href="../at-core-dropdown.html">
+
+  <style is="custom-style">
+    .page-title {
+      @apply(--paper-font-body1);
+      font-weight: 600;
+      font-size: 32px;      
+    }
+
+    .toggle-button {
+      display: block;
+      padding: 12px 20px;
+    }
+
+    .echo-text {
+      @apply(--paper-font-body1);
+      font-size: 16px;
+    }
+
+    .dropdown-line {
+     @apply(--paper-font-body1);
+      font-size: 16px;
+      padding: 0 0 0 4px;
+      margin: 4px 0; 
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="page-title">Open property demo</h1>
+  <button id="toggle" type="button" class="toggle-button">Toggle open state</button>
+  <div class="echo-text">Dropdown is currently: <span id="openEcho"></span></div>
+  <at-core-dropdown id="coreDropdown" class="core-dropdown">
+    <div class="dropdown-line">Lorem ipsum</div>
+    <div class="dropdown-line">Lorem ipsum</div>
+    <div class="dropdown-line">Lorem ipsum</div>
+    <div class="dropdown-line">Lorem ipsum</div>
+    <div class="dropdown-line">Lorem ipsum</div>
+    <div class="dropdown-line">Lorem ipsum</div>
+  </at-core-dropdown>
+
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      var toggle = document.getElementById('toggle');
+      var coreDropdown = document.getElementById('coreDropdown');
+      var openEcho = document.getElementById('openEcho');
+
+      function setOpenEchoText() {
+        if (coreDropdown.open) {
+          openEcho.textContent = "OPEN";
+        } else {
+          openEcho.textContent = "CLOSED";
+        }
+      }
+
+      setOpenEchoText();
+
+      toggle.addEventListener('click', function(event) {
+        coreDropdown.open = !coreDropdown.open;
+        setOpenEchoText();
+      });
+
+      coreDropdown.addEventListener('open-changed', function(event) {
+        setOpenEchoText();
+      });
+    });
+  </script>
+</body>
+
+</html>
