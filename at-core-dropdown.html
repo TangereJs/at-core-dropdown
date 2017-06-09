@@ -5,13 +5,13 @@
   <template>
     <style include="at-form-common"></style>
     <style>
-      :host {
+       :host {
         display: block;
         box-sizing: border-box;
         position: relative;
       }
 
-      :host(:focus) {
+       :host(:focus) {
         outline: none;
       }
 
@@ -240,8 +240,13 @@
         UNALIGNED: 'position--unaligned'
       },
 
-      ready: function() { },
-      
+      ready: function() {
+        var self = this;
+        Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
+          self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);        
+        });
+      },
+
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
         var found = false;
@@ -309,7 +314,7 @@
         var container = this.$.container;
 
         var xOffset = parseInt(this.xOffset);
-        if (window.isNaN(xOffset)) { xOffset = 0;}
+        if (window.isNaN(xOffset)) { xOffset = 0; }
         var yOffset = parseInt(this.yOffset);
         if (window.isNaN(yOffset)) { yOffset = 0; }
 
@@ -346,7 +351,7 @@
           container.style.bottom = bottomVal + 'px';
         } else {
           // Default: position below the "for" element, aligned to its left.
-          var leftVal  = relativeTo.offsetLeft + xOffset;
+          var leftVal = relativeTo.offsetLeft + xOffset;
           container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
@@ -354,29 +359,20 @@
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
-          }          
+          }
         }
       },
       show: function(evt, relativeTo) {
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
-        var outline = this.$.outline;
 
         this.toggleClass('hidden', false, content);
 
-        // Measure the inner element.
-        var height = content.getBoundingClientRect().height;
-        var width = content.getBoundingClientRect().width;
+        this._updateContainerAndOutlineSize(content, container, this.$.outline);
 
         if (relativeTo) {
           this._updateDropdownPosition(relativeTo);
         }
-
-        // Apply the inner element's size to the container and outline.
-        container.style.width = width + 'px';
-        container.style.height = height + 'px';
-        outline.style.width = width + 'px';
-        outline.style.height = height + 'px';
 
         var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
 
@@ -399,11 +395,23 @@
         var mask = this.$.mask;
         this.toggleClass('hidden', false, mask);
 
-
         this._isOpen = true;
         this.open = true;
         // this.focus();
       },
+
+      _updateContainerAndOutlineSize: function(contentNode, containerNode, outlineNode) {
+        var contentClientRect = contentNode.getBoundingClientRect();
+        var height = contentClientRect.height;
+        var width = contentClientRect.width;
+
+        // Apply the inner element's size to the container and outline.
+        containerNode.style.width = width + 'px';
+        containerNode.style.height = height + 'px';
+        outlineNode.style.width = width + 'px';
+        outlineNode.style.height = height + 'px';
+      },
+
       _maskOnTap: function(event) {
         var mask = this.$.mask;
 
