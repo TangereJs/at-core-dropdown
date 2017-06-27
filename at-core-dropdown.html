@@ -20,7 +20,7 @@
         margin: 0;
         padding: 0;
         border: none;
-        position: absolute;
+        position: fixed;
         overflow: visible;
         height: 0;
         width: 0;
@@ -247,7 +247,11 @@
       ready: function() {
         var self = this;
         Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
-          self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);        
+          self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
+        });
+
+        window.addEventListener('resize', function() {
+          self.hide();
         });
       },
 
@@ -313,7 +317,6 @@
       },
       _updateDropdownPosition: function(relativeTo) {
         var rect = relativeTo.getBoundingClientRect();
-        var forRect = relativeTo.parentElement.getBoundingClientRect();
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
 
@@ -332,34 +335,34 @@
           // manually specify position.
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
-          var rightVal = (forRect.right - rect.right) - xOffset;
+          var rightVal = (window.innerWidth - rect.left - rect.width) + xOffset;
           container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var topVal = yOffset;
+            var topVal = rect.top + rect.width + yOffset;
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
           }
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
-          var leftVal = relativeTo.offsetLeft + xOffset;
+          var leftVal = rect.left + xOffset;
           container.style.left = leftVal + 'px';
-          var bottomVal = (forRect.bottom - rect.top) - yOffset;
+          var bottomVal = (window.innerHeight - rect.bottom + rect.height) + yOffset;
           container.style.bottom = bottomVal + 'px';
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
-          var rightVal = (forRect.right - rect.right) - xOffset;
+          var rightVal = (window.innerWidth - rect.left - rect.width) + xOffset;
           container.style.right = rightVal + 'px';
-          var bottomVal = (forRect.bottom - rect.top) - yOffset;
+          var bottomVal = (window.innerHeight - rect.bottom + rect.height) + yOffset;
           container.style.bottom = bottomVal + 'px';
         } else {
-          // Default: position below the "for" element, aligned to its left.
-          var leftVal = relativeTo.offsetLeft + xOffset;
+          // Default: position below the "for" element, aligned to its left.          
+          var leftVal = rect.left + xOffset;
           container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var topVal = yOffset;
+            var topVal = rect.top + rect.width + yOffset;
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
