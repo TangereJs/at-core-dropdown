@@ -244,14 +244,27 @@
         UNALIGNED: 'position--unaligned'
       },
 
+      attached: function() {
+        this._boundWindowScrollResizeEventHandler = this._handleWindowScrollResizeEvent.bind(this);
+        // we want to close the dropdown on scroll or resize
+        window.addEventListener('resize', this._boundWindowScrollResizeEventHandler);
+        window.addEventListener('scroll', this._boundWindowScrollResizeEventHandler);
+      },
+
+      detached: function() {
+        // cleanup
+        window.removeEventListener('resize', this._boundWindowScrollResizeEventHandler);
+        window.removeEventListener('scroll', this._boundWindowScrollResizeEventHandler);
+      },
+
+      _handleWindowScrollResizeEvent: function() {
+        this.hide();
+      },
+
       ready: function() {
         var self = this;
         Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
           self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
-        });
-
-        window.addEventListener('resize', function() {
-          self.hide();
         });
       },
 
