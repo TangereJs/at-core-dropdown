@@ -9,9 +9,9 @@
         box-sizing: border-box;
       }
     </style>
-    
+
     <at-core-dropdown-impl id="impl" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleOpenChanged">
-      <content></content>      
+      <content></content>
     </at-core-dropdown-impl>
   </template>
   <script>
@@ -82,22 +82,55 @@
       }],
 
       _handleOpenChanged: function(newValue, oldValue) {
+        if (this.$.impl.open) return;
 
+        // if dropdown is already removed from body return
+        if (this.contains(this.$.impl)) return;
+
+        // dropdown is closed; remove from body
+        document.body.removeChild(this.$.impl);
+        this.appendChild(this.$.impl);
       },
 
       isOpen: function() {
-        return this.open;
+        return this.$.impl.open;
       },
 
       toggle: function(relativeTo, evt) {
+        var dropdown = this.$.impl;
+
+        if (dropdown.open) {
+          // dropdown will be closed; remove from body
+          document.body.removeChild(dropdown);
+          this.appendChild(dropdown);
+        } else {
+          // dropdown will be opened; append to body
+          this.removeChild(dropdown);
+          document.body.appendChild(dropdown);
+        }
+
         this.$.impl.toggle(relativeTo, evt);
       },
 
       show: function(evt, relativeTo) {
+        if (this.$.impl.open) return;
+
+        var dropdown = this.$.impl;
+        // dropdown will be opened; append to body
+        this.removeChild(dropdown);
+        document.body.appendChild(dropdown);
+
         this.$.impl.show(evt, relativeTo);
       },
 
       hide: function() {
+        if (!this.$.impl.open) return;
+        
+        var dropdown = this.$.impl;
+        // dropdown will be closed; remove from body
+        document.body.removeChild(dropdown);
+        this.appendChild(dropdown);
+
         this.$.impl.hide();
       }
 
