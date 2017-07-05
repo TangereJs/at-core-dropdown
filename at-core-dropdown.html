@@ -363,6 +363,8 @@
       },
 
       show: function(evt, relativeTo) {
+        if (this._isOpen) return;
+        
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
 
