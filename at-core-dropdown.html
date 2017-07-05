@@ -359,7 +359,7 @@
           container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var topVal = rect.top + rect.width - yOffset;
+            var topVal = rect.top + rect.width + yOffset;
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
@@ -368,13 +368,13 @@
           // Position above the "for" element, aligned to its left.
           var leftVal = rect.left + xOffset;
           container.style.left = leftVal + 'px';
-          var bottomVal = (window.innerHeight - rect.bottom + rect.height) + yOffset;
+          var bottomVal = (window.innerHeight - rect.bottom + rect.height) - yOffset;
           container.style.bottom = bottomVal + 'px';
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
           var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
           container.style.right = rightVal + 'px';
-          var bottomVal = (window.innerHeight - rect.bottom + rect.height) + yOffset;
+          var bottomVal = (window.innerHeight - rect.bottom + rect.height) - yOffset;
           container.style.bottom = bottomVal + 'px';
         } else {
           // Default: position below the "for" element, aligned to its left.
@@ -382,7 +382,7 @@
           container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var topVal = rect.top + rect.width - yOffset;
+            var topVal = rect.top + rect.width + yOffset;
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
