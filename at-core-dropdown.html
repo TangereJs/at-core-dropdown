@@ -1,169 +1,27 @@
 <link rel="import" href="../tangere/tangere.html">
-<link rel="import" href="../at-theme/at-theme.html">
+<link rel="import" href="at-core-dropdown-impl.html" />
 
 <dom-module id="at-core-dropdown">
   <template>
-    <style include="at-form-common"></style>
     <style>
        :host {
         display: block;
         box-sizing: border-box;
       }
-
-       :host(:focus) {
-        outline: none;
-      }
-
-      .container {
-        display: block;
-        margin: 0;
-        padding: 0;
-        border: none;
-        position: absolute;
-        overflow: visible;
-        height: 0;
-        width: 0;
-        visibility: hidden;
-        z-index: -1;
-      }
-
-      .container.is-visible,
-      .container.is-animating {
-        z-index: 999;
-        visibility: visible;
-      }
-
-      .outline {
-        display: block;
-        background: white;
-        margin: 0;
-        padding: 0;
-        border: none;
-        border-radius: 2px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        opacity: 0;
-        -webkit-transform-origin: 0 0;
-        transform-origin: 0 0;
-        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: -1;
-      }
-
-      .container.is-visible .outline {
-        opacity: 1;
-        z-index: 999;
-      }
-
-      .outline.position--bottom-right {
-        -webkit-transform-origin: 100% 0;
-        transform-origin: 100% 0;
-      }
-
-      .outline.position--top-left {
-        -webkit-transform-origin: 0 100%;
-        transform-origin: 0 100%;
-      }
-
-      .outline.position--top-right {
-        -webkit-transform-origin: 100% 100%;
-        transform-origin: 100% 100%;
-      }
-
-      .content {
-        position: absolute;
-        list-style: none;
-        top: 0;
-        left: 0;
-        height: auto;
-        width: auto;
-        min-width: 124px;
-        margin: 0;
-        opacity: 0;
-        z-index: -1;
-        @apply(--at-picker-background);
-      }
-
-      .content.hidden {
-        display: none;
-      }
-
-      .container.is-visible .content {
-        opacity: 1;
-        z-index: 999;
-      }
-
-      .content.is-animating {
-        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .content.position--bottom-right {
-        left: auto;
-        right: 0;
-      }
-
-      .content.position--top-left {
-        top: auto;
-        bottom: 0;
-      }
-
-      .content.position--top-right {
-        top: auto;
-        left: auto;
-        bottom: 0;
-        right: 0;
-      }
-
-      .content.position--unaligned {
-        top: auto;
-        left: auto;
-      }
-
-      #mask {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: transparent;
-        opacity: 0.3;
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-        z-index: 2;
-        -webkit-transition: opacity 0.3s ease-in-out;
-        -moz-transition: opacity 0.3s ease-in-out;
-        -ms-transition: opacity 0.3s ease-in-out;
-        -o-transition: opacity 0.3s ease-in-out;
-        transition: opacity 0.3s ease-in-out;
-      }
-
-      #mask.hidden {
-        display: none;
-      }
     </style>
-    <div id="container" class="container">
-      <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
-      <div id="outline" class="outline position--bottom-left"></div>
-      <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
-        <content id="insertPoint"></content>
-      </div>
-    </div>
+    
+    <at-core-dropdown-impl id="impl" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleOpenChanged">
+      <content></content>      
+    </at-core-dropdown-impl>
   </template>
   <script>
     'use strict';
     Polymer({
       is: 'at-core-dropdown',
-      hostAttributes: {
-        tabindex: -1
-      },
       properties: {
         position: {
           type: String,
           value: "bottomLeft",
-          observer: 'positionChanged',
           xtype: "enum",
           xvaluelist: [{
             title: "Top Left",
@@ -215,7 +73,6 @@
         open: {
           type: Boolean,
           value: false,
-          observer: '_openChanged',
           notify: true
         }
       },
@@ -224,234 +81,26 @@
         playground: false // disable playground for this element
       }],
 
-      Constant_: {
-        // Total duration of the menu animation.
-        TRANSITION_DURATION_SECONDS: 0.3,
-        // The fraction of the total duration we want to use for menu item animations.
-        TRANSITION_DURATION_FRACTION: 0.8,
-        // How long the menu stays open after choosing an option (so the user can see
-        // the ripple).
-        CLOSE_TIMEOUT: 150
-      },
+      _handleOpenChanged: function(newValue, oldValue) {
 
-      CssClasses_: {
-        CONTAINER: 'container',
-        OUTLINE: 'outline',
-        ITEM: 'item',
-        // Statuses
-        IS_UPGRADED: 'is-upgraded',
-        IS_VISIBLE: 'is-visible',
-        IS_ANIMATING: 'is-animating',
-        // Alignment options
-        BOTTOM_LEFT: 'position--bottom-left', // This is the default.
-        BOTTOM_RIGHT: 'position--bottom-right',
-        TOP_LEFT: 'position--top-left',
-        TOP_RIGHT: 'position--top-right',
-        UNALIGNED: 'position--unaligned'
-      },
-
-      ready: function() {
-        var self = this;
-        Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
-          self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
-        });
-      },
-
-      _isPositionValueValid: function(value) {
-        var list = this.properties.position.xvaluelist;
-        var found = list.find(function(item) { return item.value === value; });
-        return !!found;
-      },
-
-      _openChanged: function(newValue, oldValue) {
-        var result = newValue ? this.show() : this.hide();
       },
 
       isOpen: function() {
-        return this._isOpen;
-      },
-
-      positionChanged: function(newValue, oldValue) {
-        if (!this._isPositionValueValid(newValue)) return;
-
-        var content = this.$.atCoreDropdownContent;
-        var outline = this.$.outline;
-        // update css class
-        var classPrefix = 'position--';
-        var mode = 'bottom-left';
-        var className = classPrefix + mode;
-        if (oldValue) {
-          mode = Polymer.CaseMap.camelToDashCase(oldValue);
-          className = classPrefix + mode;
-        }
-        Polymer.dom(content).classList.remove(className);
-        Polymer.dom(outline).classList.remove(className);
-
-        if (newValue) {
-          mode = Polymer.CaseMap.camelToDashCase(newValue)
-          className = classPrefix + mode;
-        }
-        Polymer.dom(content).classList.add(className);
-        Polymer.dom(outline).classList.add(className);
+        return this.open;
       },
 
       toggle: function(relativeTo, evt) {
-        this._updateDropdownPosition(relativeTo);
-
-        var container = this.$.container;
-        if (container.classList.contains(this.CssClasses_.IS_VISIBLE)) {
-          this.hide();
-        } else {
-          this.show(evt);
-        }
-      },
-
-      _updateDropdownPosition: function(relativeTo) {
-        var rect = relativeTo.getBoundingClientRect();
-        var content = this.$.atCoreDropdownContent;
-        var container = this.$.container;
-
-        var xOffset = parseInt(this.xOffset);
-        if (window.isNaN(xOffset)) { xOffset = 0; }
-        var yOffset = parseInt(this.yOffset);
-        if (window.isNaN(yOffset)) { yOffset = 0; }
-
-        container.style.left = '';
-        container.style.right = '';
-        container.style.top = '';
-        container.style.bottom = '';
-
-        if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
-          // Do not position the menu automatically. Requires the developer to
-          // manually specify position.
-        } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
-          // Position below the "for" element, aligned to its right.
-          var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
-          container.style.right = rightVal + 'px';
-          // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
-          var topVal = rect.top + rect.width + yOffset;
-          container.style.top = topVal + 'px';
-
-        } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
-          // Position above the "for" element, aligned to its left.
-          var leftVal = rect.left + xOffset;
-          container.style.left = leftVal + 'px';
-          
-          var bottomVal = window.innerHeight - rect.top - yOffset;
-          container.style.bottom = bottomVal + 'px';
-
-        } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
-          // Position above the "for" element, aligned to its right.
-          var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
-          container.style.right = rightVal + 'px';
-          var bottomVal = window.innerHeight - rect.top - yOffset;
-          container.style.bottom = bottomVal + 'px';
-
-        } else {
-          // Default: position below the "for" element, aligned to its left.
-          var leftVal = rect.left + xOffset;
-          container.style.left = leftVal + 'px';
-          // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
-          var topVal = rect.top + rect.height + yOffset;
-          container.style.top = topVal + 'px';
-        }
+        this.$.impl.toggle(relativeTo, evt);
       },
 
       show: function(evt, relativeTo) {
-        if (this._isOpen) return;
-        
-        var content = this.$.atCoreDropdownContent;
-        var container = this.$.container;
-
-        this.toggleClass('hidden', false, content);
-
-        this._updateContainerAndOutlineSize(content, container, this.$.outline);
-
-        if (relativeTo) {
-          this._updateDropdownPosition(relativeTo);
-        }
-
-        var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
-
-        // Turn on animation, and apply the final clip.
-        // Also make it visible. This triggers the transitions.
-        this._requestAnimationFrameEnded = false;
-        requestAnimationFrame(function() {
-          Polymer.dom(content).classList.add(this.CssClasses_.IS_ANIMATING);
-          // content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
-          Polymer.dom(container).classList.add(this.CssClasses_.IS_VISIBLE);
-          this._requestAnimationFrameEnded = true;
-        }.bind(this));
-
-        // Clean up after the animation is complete.
-        this.addAnimationEndListener_();
-
-        var mask = this.$.mask;
-        this.toggleClass('hidden', false, mask);
-
-        this._isOpen = true;
-        this.open = true;
-        // this.focus();
-      },
-
-      _updateContainerAndOutlineSize: function(contentNode, containerNode, outlineNode) {
-        var contentClientRect = contentNode.getBoundingClientRect();
-        var height = contentClientRect.height;
-        var width = contentClientRect.width;
-
-        // Apply the inner element's size to the container and outline.
-        containerNode.style.width = width + 'px';
-        containerNode.style.height = height + 'px';
-        outlineNode.style.width = width + 'px';
-        outlineNode.style.height = height + 'px';
-      },
-
-      _maskOnTap: function(event) {
-        var mask = this.$.mask;
-
-        this.toggleClass('hidden', true, mask);
-        var content = this.$.atCoreDropdownContent;
-        this.toggleClass('hidden', true, content);
-        this.hide();
+        this.$.impl.show(evt, relativeTo);
       },
 
       hide: function() {
-        // Measure the inner element.
-        var rect = this.$.atCoreDropdownContent.getBoundingClientRect();
-        var height = rect.height;
-        var width = rect.width;
-        var content = this.$.atCoreDropdownContent;
-        var container = this.$.container;
-        var cssClasses = this.CssClasses_;
-        var self = this;
-        if (this._requestAnimationFrameEnded) {
-          // Turn on animation, and apply the final clip. Also make invisible.
-          // This triggers the transitions.
-          Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
-          Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
-        } else {
-          requestAnimationFrame(function() {
-            Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
-            Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
-          });
-        }
-
-        // Clean up after the animation is complete.
-        this.addAnimationEndListener_();
-
-        this._isOpen = false;
-        this.open = false;
-      },
-
-      removeAnimationEndListener_: function(evt) {
-        Polymer.dom(evt.target).classList.remove(this.CssClasses_.IS_ANIMATING);
-      },
-
-      addAnimationEndListener_: function() {
-        var content = this.$.atCoreDropdownContent;
-        content.addEventListener('transitionend', this.removeAnimationEndListener_.bind(this));
-        content.addEventListener('webkitTransitionEnd', this.removeAnimationEndListener_.bind(this));
+        this.$.impl.hide();
       }
+
     });
   </script>
 </dom-module>
