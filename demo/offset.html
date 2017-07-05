@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dropdown demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../at-core-dropdown.html">
+    <link rel="import" href="../../at-carbon-icon-button/at-carbon-icon-button.html">
+    <link rel="import" href="../../at-doc-snippet/at-doc-snippet.html" />
+    <style is="custom-style">
+      html * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin-top: 64px;
+      }
+
+      .demo-container {
+        margin-left: 50px;        
+        flex: 1;
+      }
+
+      img {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Dropdown position is bottom left</h1>
+    <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonBL1" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBL1" position="bottomLeft" x-offset="-20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonBL2" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBL2" position="bottomLeft" x-offset="-20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonBL3" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBL3" position="bottomLeft" x-offset="20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonBL4" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBL4" position="bottomLeft" x-offset="20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <h1>Dropdown position is bottom right</h1>
+    <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonBR1" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBR1" position="bottomRight" x-offset="-20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonBR2" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBR2" position="bottomRight" x-offset="-20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonBR3" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBR3" position="bottomRight" x-offset="20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonBR4" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBR4" position="bottomRight" x-offset="20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <h1>Dropdown position is top left</h1>
+    <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonTL1" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTL1" position="topLeft" x-offset="-20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonTL2" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTL2" position="topLeft" x-offset="-20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonTL3" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTL3" position="topLeft" x-offset="20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonTL4" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTL4" position="topLeft" x-offset="20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <h1>Dropdown position is top right</h1>
+    <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonTR1" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTR1" position="topRight" x-offset="-20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (-20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonTR2" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTR2" position="topRight" x-offset="-20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, -20)</h4>
+        <at-carbon-icon-button id="carbonButtonTR3" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTR3" position="topRight" x-offset="20" y-offset="-20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (20, 20)</h4>
+        <at-carbon-icon-button id="carbonButtonTR4" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTR4" position="topRight" x-offset="20" y-offset="20">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('WebComponentsReady', function(event) {
+        init('carbonButtonBL1', 'coreDropdownBL1');
+        init('carbonButtonBL2', 'coreDropdownBL2');
+        init('carbonButtonBL3', 'coreDropdownBL3');
+        init('carbonButtonBL4', 'coreDropdownBL4');
+
+        init('carbonButtonBR1', 'coreDropdownBR1');
+        init('carbonButtonBR2', 'coreDropdownBR2');
+        init('carbonButtonBR3', 'coreDropdownBR3');
+        init('carbonButtonBR4', 'coreDropdownBR4');
+
+        init('carbonButtonTL1', 'coreDropdownTL1');
+        init('carbonButtonTL2', 'coreDropdownTL2');
+        init('carbonButtonTL3', 'coreDropdownTL3');
+        init('carbonButtonTL4', 'coreDropdownTL4');
+
+        init('carbonButtonTR1', 'coreDropdownTR1');
+        init('carbonButtonTR2', 'coreDropdownTR2');
+        init('carbonButtonTR3', 'coreDropdownTR3');
+        init('carbonButtonTR4', 'coreDropdownTR4');
+
+        function init(buttonId, dropdownId) {
+          var carbonButton = document.getElementById(buttonId);
+          var coreDropdown = document.getElementById(dropdownId);
+
+          carbonButton.addEventListener('click', function(event) {
+            coreDropdown.toggle(carbonButton, event);
+          });
+        }
+      });
+    </script>
+  </body>
+
+</html>
