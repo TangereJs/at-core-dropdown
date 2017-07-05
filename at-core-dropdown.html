@@ -180,10 +180,26 @@
             value: "bottomRight"
           }]
         },
+
+        /**
+         * Positive value moves element to the right. Negative value moves element to the left
+         * 
+         * @property xOffset
+         * @type Number
+         * @default 0
+         */
         xOffset: {
           type: Number,
           value: 0
         },
+
+        /**
+         * Positive value moves element to the top. Negative value moves element to the bottom
+         * 
+         * @property yOffset
+         * @type Number
+         * @default 0
+         */        
         yOffset: {
           type: Number,
           value: 0
@@ -339,11 +355,11 @@
           // manually specify position.
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
-          var rightVal = (window.innerWidth - rect.left - rect.width) + xOffset;
+          var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
           container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var topVal = rect.top + rect.width + yOffset;
+            var topVal = rect.top + rect.width - yOffset;
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
@@ -356,17 +372,17 @@
           container.style.bottom = bottomVal + 'px';
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
-          var rightVal = (window.innerWidth - rect.left - rect.width) + xOffset;
+          var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
           container.style.right = rightVal + 'px';
           var bottomVal = (window.innerHeight - rect.bottom + rect.height) + yOffset;
           container.style.bottom = bottomVal + 'px';
         } else {
-          // Default: position below the "for" element, aligned to its left.          
+          // Default: position below the "for" element, aligned to its left.
           var leftVal = rect.left + xOffset;
           container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
           if (yOffset) {
-            var topVal = rect.top + rect.width + yOffset;
+            var topVal = rect.top + rect.width - yOffset;
             container.style.top = topVal + 'px';
           } else {
             container.style.top = '';
