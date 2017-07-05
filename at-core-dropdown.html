@@ -199,7 +199,7 @@
          * @property yOffset
          * @type Number
          * @default 0
-         */        
+         */
         yOffset: {
           type: Number,
           value: 0
@@ -251,23 +251,6 @@
         UNALIGNED: 'position--unaligned'
       },
 
-      attached: function() {
-        this._boundWindowScrollResizeEventHandler = this._handleWindowScrollResizeEvent.bind(this);
-        // we want to close the dropdown on scroll or resize
-        window.addEventListener('resize', this._boundWindowScrollResizeEventHandler);
-        window.addEventListener('scroll', this._boundWindowScrollResizeEventHandler);
-      },
-
-      detached: function() {
-        // cleanup
-        window.removeEventListener('resize', this._boundWindowScrollResizeEventHandler);
-        window.removeEventListener('scroll', this._boundWindowScrollResizeEventHandler);
-      },
-
-      _handleWindowScrollResizeEvent: function() {
-        this.hide();
-      },
-
       ready: function() {
         var self = this;
         Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
@@ -277,54 +260,42 @@
 
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
-        var found = false;
-        var listLength = list.length;
-        var listItem;
-        for (var i = 0; i < listLength; i++) {
-          listItem = list[i];
-          if (listItem.value === value) {
-            found = listItem;
-            break;
-          }
-        }
-        var result = found !== false;
-        return result;
+        var found = list.find(function(item) { return item.value === value; });
+        return !!found;
       },
 
       _openChanged: function(newValue, oldValue) {
-        if (newValue) {
-          this.show();
-        } else {
-          this.hide();
-        }
+        var result = newValue ? this.show() : this.hide();
       },
 
       isOpen: function() {
         return this._isOpen;
       },
-      positionChanged: function(newValue, oldValue) {
-        if (this._isPositionValueValid(newValue)) {
-          var content = this.$.atCoreDropdownContent;
-          var outline = this.$.outline;
-          // update css class
-          var classPrefix = 'position--';
-          var mode = 'bottom-left';
-          var className = classPrefix + mode;
-          if (oldValue) {
-            mode = Polymer.CaseMap.camelToDashCase(oldValue);
-            className = classPrefix + mode;
-          }
-          Polymer.dom(content).classList.remove(className);
-          Polymer.dom(outline).classList.remove(className);
 
-          if (newValue) {
-            mode = Polymer.CaseMap.camelToDashCase(newValue)
-            className = classPrefix + mode;
-          }
-          Polymer.dom(content).classList.add(className);
-          Polymer.dom(outline).classList.add(className);
+      positionChanged: function(newValue, oldValue) {
+        if (!this._isPositionValueValid(newValue)) return;
+
+        var content = this.$.atCoreDropdownContent;
+        var outline = this.$.outline;
+        // update css class
+        var classPrefix = 'position--';
+        var mode = 'bottom-left';
+        var className = classPrefix + mode;
+        if (oldValue) {
+          mode = Polymer.CaseMap.camelToDashCase(oldValue);
+          className = classPrefix + mode;
         }
+        Polymer.dom(content).classList.remove(className);
+        Polymer.dom(outline).classList.remove(className);
+
+        if (newValue) {
+          mode = Polymer.CaseMap.camelToDashCase(newValue)
+          className = classPrefix + mode;
+        }
+        Polymer.dom(content).classList.add(className);
+        Polymer.dom(outline).classList.add(className);
       },
+
       toggle: function(relativeTo, evt) {
         this._updateDropdownPosition(relativeTo);
 
@@ -335,6 +306,7 @@
           this.show(evt);
         }
       },
+
       _updateDropdownPosition: function(relativeTo) {
         var rect = relativeTo.getBoundingClientRect();
         var content = this.$.atCoreDropdownContent;
@@ -389,6 +361,7 @@
           }
         }
       },
+
       show: function(evt, relativeTo) {
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
@@ -402,9 +375,6 @@
         }
 
         var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
-
-        // Apply the initial clip to the text before we start animating.
-        // this.applyClip_(height, width);
 
         // Turn on animation, and apply the final clip.
         // Also make it visible. This triggers the transitions.
@@ -447,6 +417,7 @@
         this.toggleClass('hidden', true, content);
         this.hide();
       },
+
       hide: function() {
         // Measure the inner element.
         var rect = this.$.atCoreDropdownContent.getBoundingClientRect();
@@ -460,12 +431,10 @@
           // Turn on animation, and apply the final clip. Also make invisible.
           // This triggers the transitions.
           Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
-          // this.applyClip_(height, width);
           Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
         } else {
           requestAnimationFrame(function() {
             Polymer.dom(content).classList.add(cssClasses.IS_ANIMATING);
-            // self.applyClip_(height, width);
             Polymer.dom(container).classList.remove(cssClasses.IS_VISIBLE);
           });
         }
@@ -476,29 +445,11 @@
         this._isOpen = false;
         this.open = false;
       },
-      applyClip_: function(height, width) {
-        var content = this.$.atCoreDropdownContent;
-        if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
-          // Do not clip.
-          content.style.clip = '';
-        } else if (
-          content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
-          // Clip to the top right corner of the menu.
-          content.style.clip = 'rect(0 ' + width + 'px 0 ' + width + 'px)';
-        } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
-          // Clip to the bottom left corner of the menu.
-          content.style.clip = 'rect(' + height + 'px 0 ' + height + 'px 0)';
-        } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
-          // Clip to the bottom right corner of the menu.
-          content.style.clip = 'rect(' + height + 'px ' + width + 'px ' + height + 'px ' + width + 'px)';
-        } else {
-          // Default: do not clip (same as clipping to the top left corner).
-          content.style.clip = '';
-        }
-      },
+
       removeAnimationEndListener_: function(evt) {
         Polymer.dom(evt.target).classList.remove(this.CssClasses_.IS_ANIMATING);
       },
+
       addAnimationEndListener_: function() {
         var content = this.$.atCoreDropdownContent;
         content.addEventListener('transitionend', this.removeAnimationEndListener_.bind(this));
