@@ -10,7 +10,7 @@
       }
     </style>
 
-    <at-core-dropdown-impl id="impl" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleOpenChanged">
+    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleOpenChanged">
       <content></content>
     </at-core-dropdown-impl>
   </template>
@@ -82,22 +82,37 @@
       }],
 
       _handleOpenChanged: function(newValue, oldValue) {
-        if (this.$.impl.open) return;
+        var impl = this._getImplElement();
+        if (impl.open) return;
 
         // if dropdown is already removed from body return
-        if (this.contains(this.$.impl)) return;
+        if (this.contains(impl)) return;
 
         // dropdown is closed; remove from body
-        document.body.removeChild(this.$.impl);
-        this.appendChild(this.$.impl);
+        document.body.removeChild(impl);
+        this.appendChild(impl);
+      },
+
+      _computeImplId: function() {        
+        var parentId = this.getAttribute('id');
+        parentId = parentId ? parentId : 'parent';
+        var rndNum = Math.floor(Math.random(1000, 9999) * 10000);
+        var implId = this._implId = 'impl' + rndNum + parentId;
+        return implId;
+      },
+
+      _getImplElement: function() {
+        var selector = '#' + this._implId;
+        var implElement = this.$$(selector);
+        return implElement;
       },
 
       isOpen: function() {
-        return this.$.impl.open;
+        return this._getImplElement().open;
       },
 
       toggle: function(relativeTo, evt) {
-        var dropdown = this.$.impl;
+        var dropdown = this._getImplElement();
 
         if (dropdown.open) {
           // dropdown will be closed; remove from body
@@ -109,29 +124,29 @@
           document.body.appendChild(dropdown);
         }
 
-        this.$.impl.toggle(relativeTo, evt);
+        dropdown.toggle(relativeTo, evt);
       },
 
       show: function(evt, relativeTo) {
-        if (this.$.impl.open) return;
+        var impl = this._getImplElement();
+        if (impl.open) return;
 
-        var dropdown = this.$.impl;
         // dropdown will be opened; append to body
-        this.removeChild(dropdown);
-        document.body.appendChild(dropdown);
+        this.removeChild(impl);
+        document.body.appendChild(impl);
 
-        this.$.impl.show(evt, relativeTo);
+        impl.show(evt, relativeTo);
       },
 
       hide: function() {
-        if (!this.$.impl.open) return;
-        
-        var dropdown = this.$.impl;
+        var impl = this._getImplElement();
+        if (!impl.open) return;
+                
         // dropdown will be closed; remove from body
-        document.body.removeChild(dropdown);
-        this.appendChild(dropdown);
+        document.body.removeChild(impl);
+        this.appendChild(impl);
 
-        this.$.impl.hide();
+        impl.hide();
       }
 
     });
