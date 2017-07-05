@@ -8,7 +8,6 @@
        :host {
         display: block;
         box-sizing: border-box;
-        position: relative;
       }
 
        :host(:focus) {
@@ -20,7 +19,7 @@
         margin: 0;
         padding: 0;
         border: none;
-        position: fixed;
+        position: absolute;
         overflow: visible;
         height: 0;
         width: 0;
@@ -330,35 +329,31 @@
           var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
           container.style.right = rightVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
-          if (yOffset) {
-            var topVal = rect.top + rect.width + yOffset;
-            container.style.top = topVal + 'px';
-          } else {
-            container.style.top = '';
-          }
+          var topVal = rect.top + rect.width + yOffset;
+          container.style.top = topVal + 'px';
+
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
           var leftVal = rect.left + xOffset;
           container.style.left = leftVal + 'px';
-          var bottomVal = (window.innerHeight - rect.bottom + rect.height) - yOffset;
+          
+          var bottomVal = window.innerHeight - rect.top - yOffset;
           container.style.bottom = bottomVal + 'px';
+
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
           var rightVal = (window.innerWidth - rect.left - rect.width) - xOffset;
           container.style.right = rightVal + 'px';
-          var bottomVal = (window.innerHeight - rect.bottom + rect.height) - yOffset;
+          var bottomVal = window.innerHeight - rect.top - yOffset;
           container.style.bottom = bottomVal + 'px';
+
         } else {
           // Default: position below the "for" element, aligned to its left.
           var leftVal = rect.left + xOffset;
           container.style.left = leftVal + 'px';
           // container.style.top = relativeTo.offsetTop + relativeTo.offsetHeight + 'px';
-          if (yOffset) {
-            var topVal = rect.top + rect.width + yOffset;
-            container.style.top = topVal + 'px';
-          } else {
-            container.style.top = '';
-          }
+          var topVal = rect.top + rect.height + yOffset;
+          container.style.top = topVal + 'px';
         }
       },
 
