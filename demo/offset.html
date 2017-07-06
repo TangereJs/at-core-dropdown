@@ -19,8 +19,17 @@
       }
 
       .demo-container {
-        margin-left: 50px;        
+        margin-left: 64px;
+        min-width: 300px;
         flex: 1;
+      }
+
+      .extra-margin {
+        margin-top: 64px
+      }
+
+      at-carbon-icon-button {
+        border: 1px solid purple;
       }
 
       img {
@@ -30,8 +39,15 @@
   </head>
 
   <body>
-    <h1>Dropdown position is bottom left</h1>
+    <h1 class="extra-margin">Dropdown position is bottom left</h1>
     <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (0, 0)</h4>
+        <at-carbon-icon-button id="carbonButtonBL0" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBL0" position="bottomLeft" x-offset="0" y-offset="0">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
       <div class="demo-container">
         <h4>(xoffset, yoffset) = (-20, -20)</h4>
         <at-carbon-icon-button id="carbonButtonBL1" icon="now:menu"></at-carbon-icon-button>
@@ -62,8 +78,15 @@
       </div>
     </div>
 
-    <h1>Dropdown position is bottom right</h1>
+    <h1 class="extra-margin">Dropdown position is bottom right</h1>
     <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (0, 0)</h4>
+        <at-carbon-icon-button id="carbonButtonBR0" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownBR0" position="bottomRight" x-offset="0" y-offset="0">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
       <div class="demo-container">
         <h4>(xoffset, yoffset) = (-20, -20)</h4>
         <at-carbon-icon-button id="carbonButtonBR1" icon="now:menu"></at-carbon-icon-button>
@@ -94,8 +117,15 @@
       </div>
     </div>
 
-    <h1>Dropdown position is top left</h1>
+    <h1 class="extra-margin">Dropdown position is top left</h1>
     <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (0, 0)</h4>
+        <at-carbon-icon-button id="carbonButtonTL0" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTL0" position="topLeft" x-offset="0" y-offset="0">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
       <div class="demo-container">
         <h4>(xoffset, yoffset) = (-20, -20)</h4>
         <at-carbon-icon-button id="carbonButtonTL1" icon="now:menu"></at-carbon-icon-button>
@@ -126,8 +156,15 @@
       </div>
     </div>
 
-    <h1>Dropdown position is top right</h1>
+    <h1 class="extra-margin">Dropdown position is top right</h1>
     <div class="horizontal layout">
+      <div class="demo-container">
+        <h4>(xoffset, yoffset) = (0, 0)</h4>
+        <at-carbon-icon-button id="carbonButtonTR0" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="coreDropdownTR0" position="topRight" x-offset="0" y-offset="0">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
       <div class="demo-container">
         <h4>(xoffset, yoffset) = (-20, -20)</h4>
         <at-carbon-icon-button id="carbonButtonTR1" icon="now:menu"></at-carbon-icon-button>
@@ -160,21 +197,25 @@
 
     <script>
       document.addEventListener('WebComponentsReady', function(event) {
+        init('carbonButtonBL0', 'coreDropdownBL0');
         init('carbonButtonBL1', 'coreDropdownBL1');
         init('carbonButtonBL2', 'coreDropdownBL2');
         init('carbonButtonBL3', 'coreDropdownBL3');
         init('carbonButtonBL4', 'coreDropdownBL4');
 
+        init('carbonButtonBR0', 'coreDropdownBR0');
         init('carbonButtonBR1', 'coreDropdownBR1');
         init('carbonButtonBR2', 'coreDropdownBR2');
         init('carbonButtonBR3', 'coreDropdownBR3');
         init('carbonButtonBR4', 'coreDropdownBR4');
 
+        init('carbonButtonTL0', 'coreDropdownTL0');
         init('carbonButtonTL1', 'coreDropdownTL1');
         init('carbonButtonTL2', 'coreDropdownTL2');
         init('carbonButtonTL3', 'coreDropdownTL3');
         init('carbonButtonTL4', 'coreDropdownTL4');
 
+        init('carbonButtonTR0', 'coreDropdownTR0');
         init('carbonButtonTR1', 'coreDropdownTR1');
         init('carbonButtonTR2', 'coreDropdownTR2');
         init('carbonButtonTR3', 'coreDropdownTR3');
