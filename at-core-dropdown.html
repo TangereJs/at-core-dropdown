@@ -81,6 +81,22 @@
         playground: false // disable playground for this element
       }],
 
+      attached: function() {
+        this._boundWindowResizeHandler = this._windowResizeHandler.bind(this);
+        window.addEventListener('resize', this._boundWindowResizeHandler);
+        // orientation change only works on mobile devices
+        window.addEventListener('orientationchange', this._boundWindowResizeHandler);
+      },
+
+      detached: function() {
+        window.removeEventListener('resize', this._boundWindowResizeHandler);
+        window.removeEventListener('orientationchange', this._boundWindowResizeHandler);
+      },
+
+      _windowResizeHandler: function(event) {
+        this.hide();
+      },
+
       _handleOpenChanged: function(newValue, oldValue) {
         var impl = this._getImplElement();
         if (impl.open) return;
@@ -93,7 +109,7 @@
         this.appendChild(impl);
       },
 
-      _computeImplId: function() {        
+      _computeImplId: function() {
         var parentId = this.getAttribute('id');
         parentId = parentId ? parentId : 'parent';
         var rndNum = Math.floor(Math.random(1000, 9999) * 10000);
@@ -102,8 +118,10 @@
       },
 
       _getImplElement: function() {
+        if (this.__implElement) return this.__implElement;
+
         var selector = '#' + this._implId;
-        var implElement = this.$$(selector);
+        var implElement = this.__implElement = this.$$(selector);
         return implElement;
       },
 
@@ -141,7 +159,7 @@
       hide: function() {
         var impl = this._getImplElement();
         if (!impl.open) return;
-                
+
         // dropdown will be closed; remove from body
         document.body.removeChild(impl);
         this.appendChild(impl);
