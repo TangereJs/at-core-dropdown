@@ -10,7 +10,7 @@
       }
     </style>
 
-    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleOpenChanged">
+    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}">
       <content></content>
     </at-core-dropdown-impl>
   </template>
@@ -86,27 +86,31 @@
         window.addEventListener('resize', this._boundWindowResizeHandler);
         // orientation change only works on mobile devices
         window.addEventListener('orientationchange', this._boundWindowResizeHandler);
+
+        // move dropdown-impl to document.body; keep it there until detached
+        var impl = this._getImplElement();
+        // attached may be called multiple times; we move impl to body only once
+        if (this.contains(impl)) {
+          this.removeChild(impl);
+          document.body.appendChild(impl);          
+        }
       },
 
       detached: function() {
         window.removeEventListener('resize', this._boundWindowResizeHandler);
         window.removeEventListener('orientationchange', this._boundWindowResizeHandler);
+
+        // here move dropdown-impl from document.body to this
+        var impl = this._getImplElement();
+        // dettached may be called multiple times; we move impl to this only once
+        if (!this.contains(impl)) {
+          document.body.removeChild(impl);
+          this.appendChild(impl);          
+        }
       },
 
       _windowResizeHandler: function(event) {
         this.hide();
-      },
-
-      _handleOpenChanged: function(newValue, oldValue) {
-        var impl = this._getImplElement();
-        if (impl.open) return;
-
-        // if dropdown is already removed from body return
-        if (this.contains(impl)) return;
-
-        // dropdown is closed; remove from body
-        document.body.removeChild(impl);
-        this.appendChild(impl);
       },
 
       _computeImplId: function() {
@@ -130,28 +134,14 @@
       },
 
       toggle: function(relativeTo, evt) {
-        var dropdown = this._getImplElement();
+        var impl = this._getImplElement();
 
-        if (dropdown.open) {
-          // dropdown will be closed; remove from body
-          document.body.removeChild(dropdown);
-          this.appendChild(dropdown);
-        } else {
-          // dropdown will be opened; append to body
-          this.removeChild(dropdown);
-          document.body.appendChild(dropdown);
-        }
-
-        dropdown.toggle(relativeTo, evt);
+        impl.toggle(relativeTo, evt);
       },
 
       show: function(evt, relativeTo) {
         var impl = this._getImplElement();
         if (impl.open) return;
-
-        // dropdown will be opened; append to body
-        this.removeChild(impl);
-        document.body.appendChild(impl);
 
         impl.show(evt, relativeTo);
       },
@@ -160,11 +150,12 @@
         var impl = this._getImplElement();
         if (!impl.open) return;
 
-        // dropdown will be closed; remove from body
-        document.body.removeChild(impl);
-        this.appendChild(impl);
-
         impl.hide();
+      },
+
+      updateContainerAndOutlineSize: function() {
+        var impl = this._getImplElement();
+        impl.updateContainerAndOutlineSize();
       }
 
     });
