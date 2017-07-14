@@ -406,16 +406,17 @@
         outlineNode.style.height = height + 'px';
       },
 
-      _maskOnTap: function(event) {
-        var mask = this.$.mask;
-
-        this.toggleClass('hidden', true, mask);
-        var content = this.$.atCoreDropdownContent;
-        this.toggleClass('hidden', true, content);
+      _maskOnTap: function(event) {       
         this.hide();
       },
 
       hide: function() {
+        // hide mask and content
+        var mask = this.$.mask;
+        this.toggleClass('hidden', true, mask);
+        var content = this.$.atCoreDropdownContent;
+        this.toggleClass('hidden', true, content);
+
         // Measure the inner element.
         var rect = this.$.atCoreDropdownContent.getBoundingClientRect();
         var height = rect.height;
