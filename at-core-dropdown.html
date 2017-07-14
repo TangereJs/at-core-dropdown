@@ -88,11 +88,17 @@
         window.addEventListener('orientationchange', this._boundWindowResizeHandler);
 
         // move dropdown-impl to document.body; keep it there until detached
+        this._returnImplToDocumentBody();
+      },
+
+
+      _returnImplToDocumentBody: function() {
+        // move dropdown-impl to document.body; keep it there until detached
         var impl = this._getImplElement();
         // attached may be called multiple times; we move impl to body only once
         if (this.contains(impl)) {
           this.removeChild(impl);
-          document.body.appendChild(impl);          
+          document.body.appendChild(impl);
         }
       },
 
