@@ -10,7 +10,7 @@
       }
     </style>
 
-    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}">
+    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleDropdownImplOpenChanged">
       <content></content>
     </at-core-dropdown-impl>
   </template>
@@ -86,11 +86,12 @@
         window.addEventListener('resize', this._boundWindowResizeHandler);
         // orientation change only works on mobile devices
         window.addEventListener('orientationchange', this._boundWindowResizeHandler);
-
-        // move dropdown-impl to document.body; keep it there until detached
-        this._returnImplToDocumentBody();
       },
 
+      detached: function() {
+        window.removeEventListener('resize', this._boundWindowResizeHandler);
+        window.removeEventListener('orientationchange', this._boundWindowResizeHandler);
+      },
 
       _returnImplToDocumentBody: function() {
         // move dropdown-impl to document.body; keep it there until detached
@@ -102,16 +103,23 @@
         }
       },
 
-      detached: function() {
-        window.removeEventListener('resize', this._boundWindowResizeHandler);
-        window.removeEventListener('orientationchange', this._boundWindowResizeHandler);
+      _placeImplIntoDocumentBody: function() {
+        // move dropdown-impl to document.body; keep it there until detached
+        var impl = this._getImplElement();
+        // attached may be called multiple times; we move impl to body only once
+        if (this.contains(impl)) {
+          this.removeChild(impl);
+          document.body.appendChild(impl);
+        }
+      },
 
+      _returnImplToDropdown: function() {
         // here move dropdown-impl from document.body to this
         var impl = this._getImplElement();
         // dettached may be called multiple times; we move impl to this only once
         if (!this.contains(impl)) {
           document.body.removeChild(impl);
-          this.appendChild(impl);          
+          this.appendChild(impl);
         }
       },
 
@@ -139,15 +147,31 @@
         return this._getImplElement().open;
       },
 
+      /*
+        flow1. open with show(), close with hide()
+        flow2. open with toggle(), close with toggle()
+        flow3. open with toggle(), close with hide()
+        flow4. open with show(), close with toggle()
+
+        flow5. open with show(), close by clicking #mask in at-core-dropdown-impl
+        flow6. open with toggle(), close by clicking #mask in at-core-dropdown-impl
+      */
+
       toggle: function(relativeTo, evt) {
         var impl = this._getImplElement();
 
-        impl.toggle(relativeTo, evt);
+        if (impl.open) {
+          this.hide();
+        } else {
+          this.show(evt, relativeTo);
+        }
       },
 
       show: function(evt, relativeTo) {
         var impl = this._getImplElement();
         if (impl.open) return;
+
+        this._placeImplIntoDocumentBody();
 
         impl.show(evt, relativeTo);
       },
@@ -156,7 +180,16 @@
         var impl = this._getImplElement();
         if (!impl.open) return;
 
+        this._returnImplToDropdown();
+
         impl.hide();
+      },
+
+      _handleDropdownImplOpenChanged: function(event) {
+        var opened = event.detail.value;
+        if (opened) return;
+
+        this._returnImplToDropdown();
       },
 
       updateContainerAndOutlineSize: function() {
