@@ -301,7 +301,9 @@
       _updateDropdownPosition: function(relativeTo) {
         var rect = relativeTo.getBoundingClientRect();
         var content = this.$.atCoreDropdownContent;
+        var contentRect = content.getBoundingClientRect();
         var container = this.$.container;
+
 
         var xOffset = parseInt(this.xOffset);
         if (window.isNaN(xOffset)) { xOffset = 0; }
@@ -312,8 +314,7 @@
         container.style.right = '';
         container.style.top = '';
         container.style.bottom = '';
-
-        var viewportWidth = document.documentElement.clientWidth;
+        
         var viewportHeight = document.documentElement.clientHeight;
 
         if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
@@ -321,8 +322,8 @@
           // manually specify position.
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
-          var rightVal = (viewportWidth - rect.left - rect.width) - xOffset - window.scrollX;
-          container.style.right = rightVal + 'px';
+          var leftVal = rect.left + rect.width - contentRect.width + xOffset + window.scrollX;
+          container.style.left = leftVal + 'px';
 
           var topVal = rect.top + rect.width + yOffset + window.scrollY;
           container.style.top = topVal + 'px';
@@ -337,8 +338,8 @@
 
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
-          var rightVal = (viewportWidth - rect.left - rect.width) - xOffset - window.scrollX;
-          container.style.right = rightVal + 'px';
+          var leftVal = rect.left + rect.width - contentRect.width + xOffset + window.scrollX;
+          container.style.left = leftVal + 'px';
 
           var bottomVal = viewportHeight - rect.top - yOffset - window.scrollY;
           container.style.bottom = bottomVal + 'px';
