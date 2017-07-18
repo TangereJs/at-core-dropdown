@@ -141,6 +141,14 @@
 
         flow5. open with show(), close by clicking #mask in at-core-dropdown-impl
         flow6. open with toggle(), close by clicking #mask in at-core-dropdown-impl
+
+        flow7. open with .open = true, close with .open = false
+        flow8. open with .open = true, close with hide()
+        flow9. open with .open = true, close with toggle()
+        flow10. open with .open = true, close by clicking #mask
+
+        flow11. open with show() close with open = false
+        flow12. open with toggle() close with open = false
       */
 
       toggle: function(relativeTo, evt) {
@@ -154,6 +162,8 @@
       },
 
       show: function(evt, relativeTo) {
+        this.__isOpenProgrammatically = true;
+
         var impl = this._getImplElement();
         if (impl.open) return;
 
@@ -169,13 +179,21 @@
         this._returnImplToDropdown();
 
         impl.hide();
+
+        this.__isOpenProgrammatically = false;
       },
 
       _handleDropdownImplOpenChanged: function(event) {
         var opened = event.detail.value;
-        if (opened) return;
+        
+        if (this.__isOpenProgrammatically && opened) return;
 
-        this._returnImplToDropdown();
+        if (opened) {
+          this._returnImplToDocumentBody();
+        } else {
+          this._returnImplToDropdown();          
+        }
+
       },
 
       updateContainerAndOutlineSize: function() {

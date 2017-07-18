@@ -32,7 +32,7 @@
   <h1>Show hide flows demo</h1>
   <div>
     <h4>Flow 1. Open with show() close with hide()</h4>
-    <p>show() and hide() are called programmatically, hide() 30s after show().</p>
+    <p>show() and hide() are called programmatically, hide() 10s after show().</p>
     
     <div class="horizontal layout">
       <div class="demo-controls-container">
@@ -51,7 +51,7 @@
 
   <div>
     <h4>Flow 2. Open with toggle() close with toggle()</h4>
-    <p>toggle is called programmatically, 30s from open to close.</p>
+    <p>toggle is called programmatically, 10s from open to close.</p>
     
     <div class="horizontal layout">
       <div class="demo-controls-container">
@@ -70,7 +70,7 @@
 
   <div>
     <h4>Flow 3. Open with toggle() close with hide()</h4>
-    <p>toggle is called programmatically, 30s from open to close.</p>
+    <p>toggle is called programmatically, 10s from open to close.</p>
     
     <div class="horizontal layout">
       <div class="demo-controls-container">
@@ -89,7 +89,7 @@
 
   <div>
     <h4>Flow 4. Open with show() close with toggle()</h4>
-    <p>show is called programmatically, 30s from open to close.</p>
+    <p>show is called programmatically, 10s from open to close.</p>
     
     <div class="horizontal layout">
       <div class="demo-controls-container">
@@ -137,7 +137,121 @@
       <div class="demo-content-container">
         <at-carbon-icon-button id="demo6RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo6Dropdown" position="bottomLeft">
-          <img src="http://placehold.it/360x160">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <h4>Flow 7. Open with open=true close with open=false</h4>
+    <p>open true|false is set programmatically, 10s to hide</p>
+    
+    <div class="horizontal layout">
+      <div class="demo-controls-container">
+        <button id="demo7Start">Start demo</button>
+        <span hidden id="demo7Countdown"></span>
+      </div>
+      <div class="demo-content-container">
+        <at-carbon-icon-button id="demo7RelativeTo" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="demo7Dropdown" position="bottomLeft">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <h4>Flow 8. Open with open=true close with hide()</h4>
+    <p>open true is set programmatically, 10s to hide</p>
+    
+    <div class="horizontal layout">
+      <div class="demo-controls-container">
+        <button id="demo8Start">Start demo</button>
+        <span hidden id="demo8Countdown"></span>
+      </div>
+      <div class="demo-content-container">
+        <at-carbon-icon-button id="demo8RelativeTo" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="demo8Dropdown" position="bottomLeft">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <h4>Flow 9. Open with open=true close with toggle()</h4>
+    <p>open true is set programmatically, 10s to hide</p>
+    
+    <div class="horizontal layout">
+      <div class="demo-controls-container">
+        <button id="demo9Start">Start demo</button>
+        <span hidden id="demo9Countdown"></span>
+      </div>
+      <div class="demo-content-container">
+        <at-carbon-icon-button id="demo9RelativeTo" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="demo9Dropdown" position="bottomLeft">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <h4>Flow 10. Open with open=true close with toggle()</h4>
+    <p>open true is set programmatically, 10s to hide</p>
+    
+    <div class="horizontal layout">
+      <div class="demo-controls-container">
+        <button id="demo10Start">Start demo</button>
+        <span hidden id="demo10Countdown"></span>
+      </div>
+      <div class="demo-content-container">
+        <at-carbon-icon-button id="demo10RelativeTo" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="demo10Dropdown" position="bottomLeft">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <h4>Flow 11. Open with show() close with open=false</h4>
+    <p>open true is set programmatically, 10s to hide</p>
+    
+    <div class="horizontal layout">
+      <div class="demo-controls-container">
+        <button id="demo11Start">Start demo</button>
+        <span hidden id="demo11Countdown"></span>
+      </div>
+      <div class="demo-content-container">
+        <at-carbon-icon-button id="demo11RelativeTo" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="demo11Dropdown" position="bottomLeft">
+          <img src="http://placehold.it/350x150">
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <h4>Flow 12. Open with toggle() close with open=false</h4>
+    <p>open true is set programmatically, 10s to hide</p>
+    
+    <div class="horizontal layout">
+      <div class="demo-controls-container">
+        <button id="demo12Start">Start demo</button>
+        <span hidden id="demo12Countdown"></span>
+      </div>
+      <div class="demo-content-container">
+        <at-carbon-icon-button id="demo12RelativeTo" icon="now:menu"></at-carbon-icon-button>
+        <at-core-dropdown id="demo12Dropdown" position="bottomLeft">
+          <img src="http://placehold.it/350x150">
         </at-core-dropdown>
       </div>
     </div>
@@ -153,16 +267,30 @@
 
       flow5. open with show(), close by clicking #mask in at-core-dropdown-impl
       flow6. open with toggle(), close by clicking #mask in at-core-dropdown-impl
+
+      flow7. open with .open = true, close with .open = false
+      flow8. open with .open = true, close with hide()
+      flow9. open with .open = true, close with toggle()
+      flow10. open with .open = true, close by clicking #mask
+
+      flow11. open with show() close with open = false
+      flow12. open with toggle() close with open = false
     */
     document.addEventListener('WebComponentsReady', function(event) {
-      init('demo1Start', 'demo1RelativeTo', 'demo1Dropdown', 'demo1Countdown', 10, true, 'hide');
-      init('demo2Start', 'demo2RelativeTo', 'demo2Dropdown', 'demo2Countdown', 10, false, 'toggle');
-      init('demo3Start', 'demo3RelativeTo', 'demo3Dropdown', 'demo3Countdown', 10, false, 'hide');
-      init('demo4Start', 'demo4RelativeTo', 'demo4Dropdown', 'demo4Countdown', 10, true, 'toggle');
-      init('demo5Start', 'demo5RelativeTo', 'demo5Dropdown', 'demo5Countdown', 10, true, false);
-      init('demo6Start', 'demo6RelativeTo', 'demo6Dropdown', 'demo6Countdown', 10, false, false);
+      init('demo1Start', 'demo1RelativeTo', 'demo1Dropdown', 'demo1Countdown', 10, 'show', 'hide');
+      init('demo2Start', 'demo2RelativeTo', 'demo2Dropdown', 'demo2Countdown', 10, 'toggle', 'toggle');
+      init('demo3Start', 'demo3RelativeTo', 'demo3Dropdown', 'demo3Countdown', 10, 'toggle', 'hide');
+      init('demo4Start', 'demo4RelativeTo', 'demo4Dropdown', 'demo4Countdown', 10, 'show', 'toggle');
+      init('demo5Start', 'demo5RelativeTo', 'demo5Dropdown', 'demo5Countdown', 10, 'show', false);
+      init('demo6Start', 'demo6RelativeTo', 'demo6Dropdown', 'demo6Countdown', 10, 'toggle', false);
+      init('demo7Start', 'demo7RelativeTo', 'demo7Dropdown', 'demo7Countdown', 10, 'open', 'open');
+      init('demo8Start', 'demo8RelativeTo', 'demo8Dropdown', 'demo8Countdown', 10, 'open', 'hide');
+      init('demo9Start', 'demo9RelativeTo', 'demo9Dropdown', 'demo9Countdown', 10, 'open', 'toggle');
+      init('demo10Start', 'demo10RelativeTo', 'demo10Dropdown', 'demo10Countdown', 10, 'open', false);
+      init('demo11Start', 'demo11RelativeTo', 'demo11Dropdown', 'demo11Countdown', 11, 'show', 'open');
+      init('demo12Start', 'demo12RelativeTo', 'demo12Dropdown', 'demo12Countdown', 12, 'toggle', 'open');
 
-      function init(startId, relativeToId, dropdownId, countdownId, hideTimeout, openWithShow, closeWith) {
+      function init(startId, relativeToId, dropdownId, countdownId, hideTimeout, openWith, closeWith) {
         var startButton = document.getElementById(startId);
         var relativeToButton = document.getElementById(relativeToId);
         var coreDropdown = document.getElementById(dropdownId);
@@ -171,10 +299,12 @@
 
         startButton.addEventListener('click', function() {
           currentCountdown = hideTimeout;
-          if (openWithShow) {
+          if (openWith === "show") {
             coreDropdown.show(null, relativeToButton);
-          } else {
+          } else if (openWith === "toggle") {
             coreDropdown.toggle(relativeToButton, null);
+          } else if (openWith === "open") {
+            coreDropdown.open = true;
           }
           
           if (!closeWith) return;
@@ -191,6 +321,8 @@
               coreDropdown.hide();
             } else if (closeWith === 'toggle') {
               coreDropdown.toggle(relativeToButton, null);
+            } else if (closeWith === "open") {
+              coreDropdown.open = false;
             }
           }, 1000);
         });
