@@ -145,7 +145,7 @@
     </div>
   </template>
   <script>
-    'use strict';
+    
     Polymer({
       is: 'at-core-dropdown-impl',
       hostAttributes: {
@@ -251,8 +251,14 @@
 
       _isPositionValueValid: function(value) {
         var list = this.properties.position.xvaluelist;
-        var found = list.find(function(item) { return item.value === value; });
-        return !!found;
+        var found = false;
+        for(var i=0;i<list.length;i++) {
+          if(list[i].value==value) {
+            found=true;
+            break;
+          }
+        }       
+        return found;
       },
 
       _openChanged: function(newValue, oldValue) {
