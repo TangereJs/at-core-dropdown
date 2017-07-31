@@ -326,39 +326,41 @@
         var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
         var scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
+        var leftVal, topVal, bottomVal;
+
         if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
           // Do not position the menu automatically. Requires the developer to
           // manually specify position.
         } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
           // Position below the "for" element, aligned to its right.
-          var leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
+          leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          var topVal = rect.top + rect.width + yOffset + scrollY;
+          topVal = rect.top + rect.width + yOffset + scrollY;
           container.style.top = topVal + 'px';
 
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
           // Position above the "for" element, aligned to its left.
-          var leftVal = rect.left + xOffset + scrollX;
+          leftVal = rect.left + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          var bottomVal = viewportHeight - rect.top - yOffset - scrollY;
+          bottomVal = viewportHeight - rect.top - yOffset - scrollY;
           container.style.bottom = bottomVal + 'px';
 
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
           // Position above the "for" element, aligned to its right.
-          var leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
+          leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          var bottomVal = viewportHeight - rect.top - yOffset - scrollY;
+          bottomVal = viewportHeight - rect.top - yOffset - scrollY;
           container.style.bottom = bottomVal + 'px';
 
         } else {          
           // Default: position below the "for" element, aligned to its left.
-          var leftVal = rect.left + xOffset + scrollX;
+          leftVal = rect.left + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          var topVal = rect.top + rect.height + yOffset + scrollY;
+          topVal = rect.top + rect.height + yOffset + scrollY;
           container.style.top = topVal + 'px';
         }
       },
