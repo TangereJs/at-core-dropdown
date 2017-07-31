@@ -286,7 +286,7 @@
         Polymer.dom(outline).classList.remove(className);
 
         if (newValue) {
-          mode = Polymer.CaseMap.camelToDashCase(newValue)
+          mode = Polymer.CaseMap.camelToDashCase(newValue);
           className = classPrefix + mode;
         }
         Polymer.dom(content).classList.add(className);
@@ -433,7 +433,6 @@
         var rect = this.$.atCoreDropdownContent.getBoundingClientRect();
         var height = rect.height;
         var width = rect.width;
-        var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
         var cssClasses = this.CssClasses_;
         var self = this;
