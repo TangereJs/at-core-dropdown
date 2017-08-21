@@ -1,0 +1,134 @@
+<link rel="import" href="../../tangere/tangere.html" />
+<link rel="import" href="../at-core-dropdown.html" />
+<link rel="import" href="../../at-carbon-icon-button/at-carbon-icon-button.html" />
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
+
+<dom-module id="arrows-demo">
+  <template>
+    <style include="at-core-style-classes">
+      /* this approach doesn't work */
+      /*:root {
+        --at-core-dropdown-arrow-color: #F0FFF0;
+      }*/
+
+       :host {
+        display: block;
+        box-sizing: border-box;
+        margin-top: 64px;
+      }
+
+       :host * {
+        box-sizing: border-box;
+      }
+
+      .row {
+        margin-top: 32px;
+        width: 768px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .dropdown-content {
+        height: 250px;
+      }
+
+      .blue {
+        background-color: blue;
+      }
+
+      .red {
+        background-color: red;
+      }
+
+      .green {
+        background-color: green;
+      }
+
+      .purple {
+        background-color: purple;
+      }
+
+    </style>
+
+    <div class="row layout-horizontal">
+      <div class="flex-6">
+        <h4>Dropdown position is bottom left</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger1" dropdown-id="dropdown1" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown1" arrow position="bottomLeft">
+          <div class="dropdown-content blue"></div>
+        </at-core-dropdown>
+      </div>
+      <div class="flex-6">
+        <h4>Dropdown position is bottom left, no arrow</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger1a" dropdown-id="dropdown1a" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown1a" position="bottomLeft">
+          <div class="dropdown-content blue"></div>
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <div class="row layout-horizontal">
+      <div class="flex-6">
+        <h4>Dropdown position is bottom right</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger2" dropdown-id="dropdown2" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown2" arrow position="bottomRight">
+          <div class="dropdown-content red"></div>
+        </at-core-dropdown>
+      </div>
+      <div class="flex-6">
+        <h4>Dropdown position is bottom right, no arrow</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger2a" dropdown-id="dropdown2a" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown2a" position="bottomRight">
+          <div class="dropdown-content red"></div>
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <div class="row layout-horizontal">
+      <div class="flex-6">
+        <h4>Dropdown position is top left</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger3" dropdown-id="dropdown3" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown3" arrow position="topLeft">
+          <div class="dropdown-content green"></div>
+        </at-core-dropdown>
+      </div>
+      <div class="flex-6">
+        <h4>Dropdown position is top left, no arrow</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger3a" dropdown-id="dropdown3a" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown3a" position="topLeft">
+          <div class="dropdown-content green"></div>
+        </at-core-dropdown>
+      </div>
+    </div>
+
+    <div class="row layout-horizontal">
+      <div class="flex-6">
+        <h4>Dropdown position is top right</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger4" dropdown-id="dropdown4" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown4" arrow position="topRight">
+          <div class="dropdown-content purple"></div>
+        </at-core-dropdown>
+      </div>
+      <div class="flex-6">
+        <h4>Dropdown position is top right, no arrow</h4>
+        <at-carbon-icon-button icon="now:menu" id="trigger4a" dropdown-id="dropdown4a" on-tap="_handleTriggerOnTap"></at-carbon-icon-button>
+        <at-core-dropdown id="dropdown4a" position="topRight">
+          <div class="dropdown-content purple"></div>
+        </at-core-dropdown>
+      </div>
+    </div>
+
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "arrows-demo",
+    properties: {},
+    ready: function() {},
+    _handleTriggerOnTap: function(event) {
+      var dropdownId = event.currentTarget.getAttribute('dropdown-id');
+      this.$[dropdownId].toggle(event.currentTarget, event);
+    }
+  });
+
+</script>

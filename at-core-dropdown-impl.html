@@ -135,8 +135,64 @@
       #mask.hidden {
         display: none;
       }
+
+      .arrow-bottom-left:before {
+        content: '';
+        border-top: 0;
+        border-right: 8px solid transparent;
+        border-left: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-bottom-color: var(--at-core-dropdown-arrow-color, #ccc);
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        top:-8px;
+        left: 8px;
+      }
+
+      .arrow-bottom-right:before {
+        content: '';
+        border-top: 0;
+        border-right: 8px solid transparent;
+        border-left: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-bottom-color: var(--at-core-dropdown-arrow-color, #ccc);
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        top:-8px;
+        right: 8px;
+      }
+
+      .arrow-top-left:after {
+        content: '';
+        border-top: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-left: 8px solid transparent;
+        border-bottom: 0;
+        border-top-color: var(--at-core-dropdown-arrow-color, #ccc);
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        bottom:-8px;
+        left: 8px;
+      }
+
+      .arrow-top-right:after {
+        content: '';
+        border-top: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-left: 8px solid transparent;
+        border-bottom: 0;
+        border-top-color: var(--at-core-dropdown-arrow-color, #ccc);
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        bottom:-8px;
+        right: 8px;
+      }
     </style>
-    <div id="container" class="container">
+    <div id="container" class$="container [[_computeArrowClass(arrow, position)]]">
       <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
       <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
@@ -209,6 +265,18 @@
           value: false,
           observer: '_openChanged',
           notify: true
+        },
+
+        /**
+         * If true an arrow will be displayed at the specified position
+         * 
+         * @property arrow
+         * @type Boolean
+         * @default false
+         */
+        arrow: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -240,6 +308,15 @@
         TOP_LEFT: 'position--top-left',
         TOP_RIGHT: 'position--top-right',
         UNALIGNED: 'position--unaligned'
+      },
+
+      _ARROW_Y_OFFSET: 8,
+
+      _computeArrowClass: function(arrow, position) {
+        if (!arrow) return '';
+        var positionDashCase = Polymer.CaseMap.camelToDashCase(position);
+        var className = 'arrow-' + positionDashCase;
+        return className;
       },
 
       ready: function() {
@@ -327,6 +404,7 @@
         var scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
         var leftVal, topVal, bottomVal;
+        var arrowYOffset = this.arrow ? this._ARROW_Y_OFFSET : 0;
 
         if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
           // Do not position the menu automatically. Requires the developer to
@@ -336,7 +414,7 @@
           leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          topVal = rect.top + rect.width + yOffset + scrollY;
+          topVal = rect.top + rect.width + yOffset + scrollY + arrowYOffset;
           container.style.top = topVal + 'px';
 
         } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
@@ -344,7 +422,7 @@
           leftVal = rect.left + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          bottomVal = viewportHeight - rect.top - yOffset - scrollY;
+          bottomVal = viewportHeight - rect.top - yOffset - scrollY + arrowYOffset;
           container.style.bottom = bottomVal + 'px';
 
         } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
@@ -352,7 +430,7 @@
           leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          bottomVal = viewportHeight - rect.top - yOffset - scrollY;
+          bottomVal = viewportHeight - rect.top - yOffset - scrollY + arrowYOffset;
           container.style.bottom = bottomVal + 'px';
 
         } else {          
@@ -360,7 +438,7 @@
           leftVal = rect.left + xOffset + scrollX;
           container.style.left = leftVal + 'px';
 
-          topVal = rect.top + rect.height + yOffset + scrollY;
+          topVal = rect.top + rect.height + yOffset + scrollY + arrowYOffset;
           container.style.top = topVal + 'px';
         }
       },
