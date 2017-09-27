@@ -213,6 +213,11 @@
       updateContainerAndOutlineSize: function() {
         var impl = this._getImplElement();
         impl.updateContainerAndOutlineSize();
+      },
+
+      updateDropdownPosition: function(relativeTo) {
+        var impl = this._getImplElement();
+        impl._updateDropdownPosition(relativeTo);
       }
 
     });
