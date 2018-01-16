@@ -114,7 +114,11 @@
         var impl = this._getImplElement();
         if (this.contains(impl)) {
           this.removeChild(impl);
-          document.body.appendChild(impl);
+          if (document.body.childNodes.length > 0) {
+            document.body.insertBefore(impl, document.body.childNodes[0]);
+          } else {
+            document.body.appendChild(impl);
+          }
         }
       },
 
