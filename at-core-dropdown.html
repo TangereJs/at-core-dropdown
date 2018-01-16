@@ -10,7 +10,7 @@
       }
     </style>
 
-    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleDropdownImplOpenChanged" arrow$="[[arrow]]">
+    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleDropdownImplOpenChanged" arrow$="[[arrow]]" no-mask="[[noMask]]">
       <content></content>
     </at-core-dropdown-impl>
   </template>
@@ -86,9 +86,12 @@
         arrow: {
           type: Boolean,
           value: false
+        },
+
+        noMask: {
+          type: Boolean,
+          value: false
         }
-
-
       },
 
       $meta: [{

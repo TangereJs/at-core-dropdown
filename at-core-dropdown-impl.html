@@ -193,7 +193,7 @@
       }
     </style>
     <div id="container" class$="container [[_computeArrowClass(arrow, position)]]">
-      <div id="mask" class="hidden" on-tap="_maskOnTap"></div>
+      <div id="mask" class="hidden" hidden$="[[noMask]]" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
       <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
         <content id="insertPoint"></content>
@@ -275,6 +275,11 @@
          * @default false
          */
         arrow: {
+          type: Boolean,
+          value: false
+        },
+
+        noMask: {
           type: Boolean,
           value: false
         }
@@ -386,7 +391,6 @@
         var content = this.$.atCoreDropdownContent;
         var contentRect = content.getBoundingClientRect();
         var container = this.$.container;
-
 
         var xOffset = parseInt(this.xOffset);
         if (window.isNaN(xOffset)) { xOffset = 0; }
