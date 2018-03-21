@@ -6,20 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>show hide flows demo</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../at-theme/at-theme.html" />
+  <link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
   <link rel="import" href="../at-core-dropdown.html" />
   <link rel="import" href="../../at-carbon-icon-button/at-carbon-icon-button.html" />
-  <style>
+  <style is="custom-style" include="at-core-style-classes">
     html * {
       box-sizing: border-box;
-    }
-
-    .demo-controls-container {
-      flex: 4;
-    }
-
-    .demo-content-container {
-      flex: 8;
     }
 
     img {
@@ -33,13 +25,13 @@
   <div>
     <h4>Flow 1. Open with show() close with hide()</h4>
     <p>show() and hide() are called programmatically, hide() 10s after show().</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo1Start">Start demo</button>
         <span hidden id="demo1Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo1RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo1Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -52,13 +44,13 @@
   <div>
     <h4>Flow 2. Open with toggle() close with toggle()</h4>
     <p>toggle is called programmatically, 10s from open to close.</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo2Start">Start demo</button>
         <span hidden id="demo2Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo2RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo2Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -71,13 +63,13 @@
   <div>
     <h4>Flow 3. Open with toggle() close with hide()</h4>
     <p>toggle is called programmatically, 10s from open to close.</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo3Start">Start demo</button>
         <span hidden id="demo3Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo3RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo3Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -90,13 +82,13 @@
   <div>
     <h4>Flow 4. Open with show() close with toggle()</h4>
     <p>show is called programmatically, 10s from open to close.</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo4Start">Start demo</button>
         <span hidden id="demo4Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo4RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo4Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -109,13 +101,13 @@
   <div>
     <h4>Flow 5. Open with show() close with tapping #mask</h4>
     <p>show is called programmatically, closed manually</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo5Start">Start demo</button>
         <span hidden id="demo5Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo5RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo5Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -128,13 +120,13 @@
   <div>
     <h4>Flow 6. Open with toggle() close with tapping #mask</h4>
     <p>toggle is called programmatically, closed manually</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo6Start">Start demo</button>
         <span hidden id="demo6Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo6RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo6Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -147,13 +139,13 @@
   <div>
     <h4>Flow 7. Open with open=true close with open=false</h4>
     <p>open true|false is set programmatically, 10s to hide</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo7Start">Start demo</button>
         <span hidden id="demo7Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo7RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo7Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -166,13 +158,13 @@
   <div>
     <h4>Flow 8. Open with open=true close with hide()</h4>
     <p>open true is set programmatically, 10s to hide</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo8Start">Start demo</button>
         <span hidden id="demo8Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo8RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo8Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -185,13 +177,13 @@
   <div>
     <h4>Flow 9. Open with open=true close with toggle()</h4>
     <p>open true is set programmatically, 10s to hide</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo9Start">Start demo</button>
         <span hidden id="demo9Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo9RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo9Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -204,13 +196,13 @@
   <div>
     <h4>Flow 10. Open with open=true close with toggle()</h4>
     <p>open true is set programmatically, 10s to hide</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo10Start">Start demo</button>
         <span hidden id="demo10Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo10RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo10Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -223,13 +215,13 @@
   <div>
     <h4>Flow 11. Open with show() close with open=false</h4>
     <p>open true is set programmatically, 10s to hide</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo11Start">Start demo</button>
         <span hidden id="demo11Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo11RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo11Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -242,13 +234,13 @@
   <div>
     <h4>Flow 12. Open with toggle() close with open=false</h4>
     <p>open true is set programmatically, 10s to hide</p>
-    
-    <div class="horizontal layout">
-      <div class="demo-controls-container">
+
+    <div class="layout-horizontal">
+      <div class="layout-flex-4">
         <button id="demo12Start">Start demo</button>
         <span hidden id="demo12Countdown"></span>
       </div>
-      <div class="demo-content-container">
+      <div class="layout-flex-8">
         <at-carbon-icon-button id="demo12RelativeTo" icon="now:menu"></at-carbon-icon-button>
         <at-core-dropdown id="demo12Dropdown" position="bottomLeft">
           <img src="http://placehold.it/350x150">
@@ -306,7 +298,7 @@
           } else if (openWith === "open") {
             coreDropdown.open = true;
           }
-          
+
           if (!closeWith) return;
 
           demoCountdown.textContent = "Closing dropdown in " + currentCountdown;
