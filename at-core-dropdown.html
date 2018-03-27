@@ -40,7 +40,7 @@
 
         /**
          * Positive value moves element to the right. Negative value moves element to the left
-         * 
+         *
          * @property xOffset
          * @type Number
          * @default 0
@@ -52,7 +52,7 @@
 
         /**
          * Positive value moves element to the top. Negative value moves element to the bottom
-         * 
+         *
          * @property yOffset
          * @type Number
          * @default 0
@@ -65,7 +65,7 @@
         /**
          * True when dropdown is open, false otherwise
          * set to true to open the dropdown, set to false to close it
-         * 
+         *
          * @property open
          * @type Boolean
          * @default false
@@ -78,7 +78,7 @@
 
         /**
          * If true an arrow will be displayed at the specified position
-         * 
+         *
          * @property arrow
          * @type Boolean
          * @default false
@@ -209,13 +209,13 @@
 
       _handleDropdownImplOpenChanged: function(event) {
         var opened = event.detail.value;
-        
+
         if (this.__isOpenProgrammatically && opened) return;
 
         if (opened) {
           this._returnImplToDocumentBody();
         } else {
-          this._returnImplToDropdown();          
+          this._returnImplToDropdown();
         }
 
       },
