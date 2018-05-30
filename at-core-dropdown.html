@@ -149,7 +149,20 @@
         if (this.__implElement) return this.__implElement;
 
         var selector = '#' + this._implId;
-        var implElement = this.__implElement = this.$$(selector);
+
+        // START OF HYBRID BEHAVIOR
+        var implElement;
+       
+        if (this.shadowRoot) {
+          // This branch executes for polymer 2.x
+          implElement = this.shadowRoot.querySelector(selector);
+        
+        } else {
+          // This branch executes for polymer 1.x
+          implElement = this.__implElement = this.$$(selector);
+        }
+        // END OF HYBRID BEHAVIOR
+
         return implElement;
       },
 
