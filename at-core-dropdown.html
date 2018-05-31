@@ -129,7 +129,17 @@
           if (impl.parentElement) {
             document.body.removeChild(impl);
           }
-          this.appendChild(impl);
+
+          // START OF HYBRID BEHAVIOR
+          if (this.shadowRoot) {
+            // This branch executes for polymer 2.x
+            this.shadowRoot.appendChild(impl);
+
+          } else {
+            // This branch executes for polymer 1.x
+            this.appendChild(impl);
+          }
+          // END OF HYBRID BEHAVIOR
         }
       },
 
