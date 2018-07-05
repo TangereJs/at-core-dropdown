@@ -191,6 +191,10 @@
         bottom:-12px;
         right: 8px;
       }
+
+      #mask[hidden] {
+        display: none !important;
+      }
     </style>
     <div id="container" class$="container [[_computeArrowClass(arrow, position)]]">
       <div id="mask" class="hidden" hidden$="[[noMask]]" on-tap="_maskOnTap"></div>
