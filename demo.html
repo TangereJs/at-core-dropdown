@@ -6,9 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dropdown demo</title>
   <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../at-core-style-classes/at-core-style-classes.html">
   <link rel="import" href="at-core-dropdown.html">
   <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
-  <style>
+  
+  <custom-style>
+  <style is="custom-style" include="at-core-style-classes">
     html * {
       box-sizing: border-box;
     }
@@ -24,10 +27,11 @@
       display: block;
     }
   </style>
+  </custom-style>
 </head>
 
 <body>
-  <div class="horizontal layout">
+  <div class="layout-horizontal">
     <div class="relative-container">
       <h4>Dropdown position is bottom left</h4>
       <at-carbon-icon-button id="carbonButton1" icon="now:menu"></at-carbon-icon-button>

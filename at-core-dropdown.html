@@ -8,11 +8,18 @@
         display: block;
         box-sizing: border-box;
       }
+
+      :host [hidden] {
+        display: none !important;
+      }
     </style>
 
     <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleDropdownImplOpenChanged" arrow$="[[arrow]]" no-mask="[[noMask]]">
-      <content></content>
     </at-core-dropdown-impl>
+    <div hidden>
+      <slot id="slotElement"></slot>
+      <content id="contentElement"></content>
+    </div>
   </template>
   <script>
     'use strict';
@@ -111,9 +118,27 @@
       },
 
       _returnImplToDocumentBody: function() {
+        var isShadowDom = Polymer.Settings.useShadow || Polymer.Settings.useNativeShadow;
         var impl = this._getImplElement();
-        if (this.contains(impl)) {
-          this.removeChild(impl);
+
+        var implInThis = isShadowDom ? this.root.contains(impl) : this.contains(impl);
+        if (implInThis) {
+          isShadowDom ? this.root.removeChild(impl) : this.removeChild(impl);
+          
+          var distributedChildren = [];
+          if (this.$.slotElement && this.$.slotElement.assignedNodes) {
+            distributedChildren = this.$.slotElement.assignedNodes();
+          
+          } else {
+            distributedChildren = this.getEffectiveChildNodes();
+          }
+
+          Array.prototype.forEach.call(distributedChildren, function(elt) {
+            Polymer.dom(impl).appendChild(elt);
+          });
+          
+          Polymer.dom.flush();
+
           if (document.body.childNodes.length > 0) {
             document.body.insertBefore(impl, document.body.childNodes[0]);
           } else {
@@ -123,13 +148,16 @@
       },
 
       _returnImplToDropdown: function() {
+        var isShadowDom = Polymer.Settings.useShadow || Polymer.Settings.useNativeShadow;
         var impl = this._getImplElement();
-        if (!this.contains(impl)) {
+
+        var implInThis = isShadowDom ? this.root.contains(impl) : this.contains(impl);
+        if (!implInThis) {
           // this line fails during testing with shadowDOM; in shadowDom here impl.parentELement is null
           if (impl.parentElement) {
             document.body.removeChild(impl);
           }
-
+          
           // START OF HYBRID BEHAVIOR
           if (this.shadowRoot) {
             // This branch executes for polymer 2.x
@@ -137,7 +165,7 @@
 
           } else {
             // This branch executes for polymer 1.x
-            this.appendChild(impl);
+            Polymer.dom(this.root).appendChild(impl);
           }
           // END OF HYBRID BEHAVIOR
         }
@@ -165,7 +193,7 @@
        
         if (this.shadowRoot) {
           // This branch executes for polymer 2.x
-          implElement = this.shadowRoot.querySelector(selector);
+          implElement = this.__implElement = this.shadowRoot.querySelector(selector);
         
         } else {
           // This branch executes for polymer 1.x

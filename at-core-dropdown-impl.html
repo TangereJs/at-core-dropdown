@@ -83,7 +83,7 @@
         margin: 0;
         opacity: 0;
         z-index: -1;
-        @apply(--at-picker-background);
+        @apply --at-picker-background;
       }
 
       .content.hidden {
@@ -197,6 +197,7 @@
       <div id="outline" class="outline position--bottom-left"></div>
       <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
         <content id="insertPoint"></content>
+        <slot id="insertPoint2"></slot>
       </div>
     </div>
   </template>
@@ -327,6 +328,9 @@
       ready: function() {
         var self = this;
         Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
+          self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
+        });
+        Polymer.dom(this.$.insertPoint2).observeNodes(function(info) {
           self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
         });
       },
