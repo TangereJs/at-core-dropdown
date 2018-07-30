@@ -261,7 +261,10 @@
       _handleDropdownImplOpenChanged: function(event) {
         var opened = event.detail.value;
 
-        if (this.__isOpenProgrammatically && opened) return;
+        if (this.__isOpenProgrammatically && opened)  {
+          this.__isOpenProgrammatically = false;
+          return;
+        };
 
         if (opened) {
           this._returnImplToDocumentBody();
