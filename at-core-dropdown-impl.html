@@ -497,6 +497,11 @@
       },
 
       _updateContainerAndOutlineSize: function(contentNode, containerNode, outlineNode) {
+        // force polymer UI changes to apply
+        Polymer.dom.flush();
+        // force reflow
+        contentNode.offsetWidth;
+        
         var contentClientRect = contentNode.getBoundingClientRect();
         var height = contentClientRect.height;
         var width = contentClientRect.width;
@@ -558,7 +563,9 @@
 
       addAnimationEndListener_: function() {
         var content = this.$.atCoreDropdownContent;
-        this._boundRemoveAnimationEndListener = this.removeAnimationEndListener_.bind(this);
+        if (!this._boundRemoveAnimationEndListener) {
+          this._boundRemoveAnimationEndListener = this.removeAnimationEndListener_.bind(this);
+        }
         content.addEventListener('transitionend', this._boundRemoveAnimationEndListener);
         content.addEventListener('webkitTransitionEnd', this._boundRemoveAnimationEndListener);
       }
