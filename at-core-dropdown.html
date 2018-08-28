@@ -134,7 +134,28 @@
           }
 
           Array.prototype.forEach.call(distributedChildren, function(elt) {
+            // compute the current style-scope name for elt
+            var prevScopeName = false;
+            if (elt.classList !== undefined) {
+              var indexOfSs = Array.prototype.indexOf.call(elt.classList, "style-scope");
+              prevScopeName = indexOfSs < elt.classList.length ? elt.classList[indexOfSs+1] : false;
+            }
+            
+            // this line modifies the style-scope of elt from whatever it was before to "style-scope at-core-dropdown"
+            // this breaks styling for any content a component wants to display via at-core-dropdown
+            // to circumvent this limitation, we compute current scope name of elt above 
+            // and use the scope name to create a new element that will act as scopeParent for elt 
+            // we need to restore the original style scope name so that content is styled correctly
+            // -- ij on 2018-08-28
             Polymer.dom(impl).appendChild(elt);
+
+            if (prevScopeName) {
+              // create an element with prevScopeName to act as scopeParent for elt and scope the elt with it
+              var scopeParent = document.createElement(prevScopeName);
+              scopeParent.scopeSubtree(elt);
+              // set to null so that it can be garbage collected
+              scopeParent = null;
+            }
           });
           
           Polymer.dom.flush();
