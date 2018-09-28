@@ -4,10 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>paper-menu demo</title>
+  <title>paper-listbox demo</title>
   <script src="../webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
   <link rel="import" href="at-core-dropdown.html">
-  <link rel="import" href="../paper-menu/paper-menu.html">
+  <link rel="import" href="../paper-listbox/paper-listbox.html">
   <link rel="import" href="../at-carbon-icon-button/at-carbon-icon-button.html">
   <style media="screen">
     fieldset {
@@ -24,14 +24,14 @@
   <div>
     <div>
       <div>
-        <h3>paper-menu demo</h3>
+        <h3>paper-listbox demo</h3>
         <ul>
           <li>provides styling for itself</li>
           <li>provides <b>iron-selected</b> css class for items that are tapped/clicked on</li>
-          <li>provides focus handling for itself; user can TAB into paper-menu</li>
-          <li>once paper-menu has keyboard focus, user can cycle through items with ARROW keys</li>
+          <li>provides focus handling for itself; user can TAB into paper-listbox</li>
+          <li>once paper-listbox has keyboard focus, user can cycle through items with ARROW keys</li>
           <li>selecting "items" with enter or space doesn't work; paper-item does this</li>
-          <li>closing the dropdown with ESC is very difficult; paper-menu needs focus to handle ARROW keys but also stops bubbling of keyboard events, so core-dropdown can not close itself with ECS because paper-menu intercepts ECS key</li>
+          <li>closing the dropdown with ESC is very difficult; paper-listbox needs focus to handle ARROW keys but also stops bubbling of keyboard events, so core-dropdown can not close itself with ECS because paper-listbox intercepts ECS key</li>
           <li>the same holds true for ENTER key where we want to select the item and close the dropdown in one step</li>
         </ul>
       </div>
@@ -81,7 +81,7 @@
             <li>menu should select current item and close itself on TAB out </li>
           </ol>
           <div>
-            1. paper-menu provides this
+            1. paper-listbox provides this
           </div>
           <div>
             2. paper menu doesn't provide this, this needs to be programmed in
@@ -90,7 +90,7 @@
             3. paper menu doesn't support this
           </div>
           <div>
-            4. paper-menu doesn't support closing the dropdown when item is selected with click/tap/ENTER/SPACE or TAB/ESC are pressed; this needs to be programmed in
+            4. paper-listbox doesn't support closing the dropdown when item is selected with click/tap/ENTER/SPACE or TAB/ESC are pressed; this needs to be programmed in
           </div>
         </fieldset>
         <fieldset>
@@ -108,12 +108,12 @@
       <h4>Dropdown position is bottom left</h4>
       <at-carbon-icon-button id="carbonButton1" icon="now:menu"></at-carbon-icon-button>
       <at-core-dropdown id="coreDropdown1" position="bottomLeft">
-        <paper-menu>
+        <paper-listbox>
           <div>Item 1</div>
           <div>Item 2</div>
           <div>Item 3</div>
           <div>Item 4</div>
-        </paper-menu>
+        </paper-listbox>
       </at-core-dropdown>
     </div>
   </div>

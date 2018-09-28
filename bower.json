@@ -6,6 +6,6 @@
     "tangere": "TangereJs/tangere#master",
     "at-theme": "TangereJs/at-theme#master",
     "at-carbon-icon-button": "TangereJs/at-carbon-icon-button#master",
-    "paper-menu": "PolymerElements/paper-menu#^2.0.0"
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0"
   }
 }
