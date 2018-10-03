@@ -152,7 +152,9 @@
             if (prevScopeName) {
               // create an element with prevScopeName to act as scopeParent for elt and scope the elt with it
               var scopeParent = document.createElement(prevScopeName);
-              scopeParent.scopeSubtree(elt);
+              if (scopeParent.scopeSubtree !== undefined) {
+                scopeParent.scopeSubtree(elt);
+              }
               // set to null so that it can be garbage collected
               scopeParent = null;
             }
