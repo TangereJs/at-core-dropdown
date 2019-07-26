@@ -136,6 +136,10 @@
         display: none;
       }
 
+      .maskTransparentWhite {
+        background-color: rgba(255,255,255,0.5) !important;
+      }
+
       .arrow-bottom-left:before {
         content: '';
         border-top: 0;
@@ -287,7 +291,21 @@
         noMask: {
           type: Boolean,
           value: false
-        }
+        },
+
+        renderMode: {
+          type: String,
+          value: '0',
+          observer: '_renderModeChanged',
+          xtype: "enum",
+          xvaluelist: [{
+            title: "Default",
+            value: "0"
+          }, {
+            title: "No outline",
+            value: "1"
+          }],
+        },
       },
 
       $meta: [{
@@ -328,7 +346,7 @@
         var className = 'arrow-' + positionDashCase;
         return className;
       },
-
+      
       ready: function() {
         var self = this;
         Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
@@ -357,6 +375,25 @@
 
       isOpen: function() {
         return this._isOpen;
+      },
+
+      _renderModeChanged: function (newValue, oldValue) {
+        var self = this;
+
+        var maskElement = self.$.mask;
+        var outlineElement = self.$.outline;
+
+        // default render mode
+        if (newValue == "0") {
+          maskElement.classList.remove("maskTransparentWhite");
+          outlineElement.classList.add("outline");
+        }
+
+        // no outline
+        if (newValue == "1") {
+          maskElement.classList.add("maskTransparentWhite");
+          outlineElement.classList.remove("outline");
+        }
       },
 
       positionChanged: function(newValue, oldValue) {
@@ -568,6 +605,11 @@
         }
         content.addEventListener('transitionend', this._boundRemoveAnimationEndListener);
         content.addEventListener('webkitTransitionEnd', this._boundRemoveAnimationEndListener);
+      },
+
+      setContentElementWidth: function (width) {
+        var contentElement = this.$.atCoreDropdownContent;
+        contentElement.style.width = width + "px";
       }
     });
   </script>
