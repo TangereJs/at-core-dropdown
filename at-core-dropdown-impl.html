@@ -293,6 +293,11 @@
           value: false
         },
 
+        zIndex: {
+          type: String,
+          value: "1999",
+        },
+
         renderMode: {
           type: String,
           value: '0',
@@ -501,6 +506,9 @@
         
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
+
+        // set initial z-index value on show
+        container.style.zIndex = this.zIndex;
 
         this.toggleClass('hidden', false, content);
 
