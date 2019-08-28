@@ -302,6 +302,8 @@
       _handleDropdownImplOpenChanged: function(event) {
         var opened = event.detail.value;
 
+        this._updateZIndex(opened);
+
         if (this.__isOpenProgrammatically && opened)  {
           this.__isOpenProgrammatically = false;
           return;
@@ -328,6 +330,22 @@
       setDropdownWidth: function (width) {
         var impl = this._getImplElement();
         impl.setContentElementWidth(width);
+      },
+
+      _updateZIndex: function(flag) {
+        if(flag == true) {
+          Tangere.currentLayer++;
+        }
+
+        if(flag == false && Tangere.currentLayer > 0) {
+          Tangere.currentLayer--;
+        }
+
+        var zIndexTmp = Tangere.currentLayer * 100;
+        this.zIndex = zIndexTmp;
+        console.log("Tangere.currentLayer: " + Tangere.currentLayer);
+        console.log("Dropdown z-index: " + zIndexTmp);
+
       }
 
     });
