@@ -334,18 +334,14 @@
 
       _updateZIndex: function(flag) {
         if(flag == true) {
-          Tangere.currentLayer++;
+          Tangere.layerOpen();
         }
 
         if(flag == false && Tangere.currentLayer > 0) {
-          Tangere.currentLayer--;
+          Tangere.layerClose();
         }
 
-        var zIndexTmp = Tangere.currentLayer * 100;
-        this.zIndex = zIndexTmp;
-        console.log("Tangere.currentLayer: " + Tangere.currentLayer);
-        console.log("Dropdown z-index: " + zIndexTmp);
-
+        this.zIndex = Tangere.layerZIndex();
       }
 
     });
