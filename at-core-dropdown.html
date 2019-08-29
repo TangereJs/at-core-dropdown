@@ -285,6 +285,7 @@
 
         this._returnImplToDocumentBody();
 
+        this._updateZIndex(true);
         impl.show(evt, relativeTo);
       },
 
@@ -294,6 +295,7 @@
 
         this._returnImplToDropdown();
 
+        this._updateZIndex(false);
         impl.hide();
 
         this.__isOpenProgrammatically = false;
@@ -301,8 +303,6 @@
 
       _handleDropdownImplOpenChanged: function(event) {
         var opened = event.detail.value;
-
-        this._updateZIndex(opened);
 
         if (this.__isOpenProgrammatically && opened)  {
           this.__isOpenProgrammatically = false;
