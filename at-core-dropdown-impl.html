@@ -272,8 +272,7 @@
         open: {
           type: Boolean,
           value: false,
-          observer: '_openChanged',
-          notify: true
+          observer: '_openChanged'
         },
 
         /**
@@ -375,7 +374,9 @@
       },
 
       _openChanged: function(newValue, oldValue) {
-        var result = newValue ? this.show() : this.hide();
+        if(oldValue != undefined) {
+          var result = newValue ? this.show() : this.hide();
+        }
       },
 
       isOpen: function() {

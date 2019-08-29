@@ -14,7 +14,7 @@
       }
     </style>
 
-    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" on-open-changed="_handleDropdownImplOpenChanged" arrow$="[[arrow]]" no-mask="[[noMask]]" z-index="[[zIndex]]" render-mode="[[renderMode]]">
+    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" arrow$="[[arrow]]" no-mask="[[noMask]]" z-index="[[zIndex]]" render-mode="[[renderMode]]">
     </at-core-dropdown-impl>
     <div hidden$="{{!open}}">
       <slot id="slotElement"></slot>
@@ -80,7 +80,8 @@
         open: {
           type: Boolean,
           value: false,
-          notify: true
+          notify: true,
+          observer: '_openChanged'
         },
 
         /**
@@ -301,8 +302,13 @@
         this.__isOpenProgrammatically = false;
       },
 
-      _handleDropdownImplOpenChanged: function(event) {
-        var opened = event.detail.value;
+      _openChanged: function(newValue, oldValue) {
+
+        if(oldValue == undefined) {
+          return;
+        }
+
+        var opened = newValue;
 
         if (this.__isOpenProgrammatically && opened)  {
           this.__isOpenProgrammatically = false;
@@ -312,6 +318,7 @@
         if (opened) {
           this._returnImplToDocumentBody();
         } else {
+          this._updateZIndex(false);
           this._returnImplToDropdown();
         }
 
@@ -332,17 +339,15 @@
         impl.setContentElementWidth(width);
       },
 
-      _updateZIndex: function(flag) {
-        if(flag == true) {
-          Tangere.layerOpen();
+      _updateZIndex: function(isOpened) {
+        if(isOpened == true) {
+          this.zIndex = Tangere.layerOpen();
         }
 
-        if(flag == false && Tangere.currentLayer > 0) {
+        if(isOpened == false) {
           Tangere.layerClose();
         }
-
-        this.zIndex = Tangere.layerZIndex();
-      }
+      },
 
     });
   </script>
