@@ -508,10 +508,13 @@
         var content = this.$.atCoreDropdownContent;
         var container = this.$.container;
         var mask = this.$.mask;
+        var dropdownContent = this.$.atCoreDropdownContent;
 
         // set initial z-index value on show
         container.style.zIndex = this.zIndex;
         mask.style.zIndex = this.zIndex - 1;
+        dropdownContent.style.zIndex = this.zIndex;
+
 
         this.toggleClass('hidden', false, content);
 
