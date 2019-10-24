@@ -286,7 +286,7 @@
 
         this._returnImplToDocumentBody();
 
-        this._updateZIndex(true);
+        this.zIndex = Tangere.layerOpen();
         impl.show(evt, relativeTo);
       },
 
@@ -315,10 +315,10 @@
         };
 
         if (opened) {
-          this._updateZIndex(true);
+          this.zIndex = Tangere.layerOpen();
           this._returnImplToDocumentBody();
         } else {
-          this._updateZIndex(false);
+          Tangere.layerClose();
           this._returnImplToDropdown();
         }
 
@@ -337,17 +337,7 @@
       setDropdownWidth: function (width) {
         var impl = this._getImplElement();
         impl.setContentElementWidth(width);
-      },
-
-      _updateZIndex: function(isOpened) {
-        if(isOpened == true) {
-          this.zIndex = Tangere.layerOpen();
-        }
-
-        if(isOpened == false) {
-          Tangere.layerClose();
-        }
-      },
+      }
 
     });
   </script>
