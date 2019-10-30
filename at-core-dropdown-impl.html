@@ -218,7 +218,7 @@
       properties: {
         position: {
           type: String,
-          value: "bottomLeft",
+          value: "left",
           observer: 'positionChanged',
           xtype: "enum",
           xvaluelist: [{
@@ -233,6 +233,12 @@
           }, {
             title: "Bottom Right",
             value: "bottomRight"
+          }, {
+            title: "Left",
+            value: "left"
+          }, {
+            title: "Right",
+            value: "right"
           }]
         },
 
@@ -346,6 +352,10 @@
 
       _computeArrowClass: function(arrow, position) {
         if (!arrow) return '';
+
+        if (this.position == "left") position = "bottom-left";
+        if (this.position == "right") position = "bottom-right";
+
         var positionDashCase = Polymer.CaseMap.camelToDashCase(position);
         var className = 'arrow-' + positionDashCase;
         return className;
@@ -411,17 +421,42 @@
         var classPrefix = 'position--';
         var mode = 'bottom-left';
         var className = classPrefix + mode;
-        if (oldValue) {
+
+        // remove old classes
+        if(oldValue == "left") {
+          mode = "bottom-left";
+          className = classPrefix + mode;
+        }
+
+        if(oldValue == "right") {
+          mode = "bottom-right";
+          className = classPrefix + mode;
+        }
+
+        if(oldValue != "left" && oldValue != "right" && oldValue != undefined) {
           mode = Polymer.CaseMap.camelToDashCase(oldValue);
           className = classPrefix + mode;
         }
+
         Polymer.dom(content).classList.remove(className);
         Polymer.dom(outline).classList.remove(className);
 
-        if (newValue) {
+        // add new classes
+        if(newValue == "left") {
+          mode = "bottom-left";
+          className = classPrefix + mode;
+        }
+
+        if(newValue == "right") {
+          mode = "bottom-right";
+          className = classPrefix + mode;
+        }
+
+        if(newValue != "left" && newValue != "right" && newValue != undefined) {
           mode = Polymer.CaseMap.camelToDashCase(newValue);
           className = classPrefix + mode;
         }
+       
         Polymer.dom(content).classList.add(className);
         Polymer.dom(outline).classList.add(className);
       },
@@ -429,11 +464,77 @@
       toggle: function(relativeTo, evt) {
         this._updateDropdownPosition(relativeTo);
 
+        this._updatePositionClasses(relativeTo);
+
         var container = this.$.container;
         if (container.classList.contains(this.CssClasses_.IS_VISIBLE)) {
           this.hide();
         } else {
           this.show(evt);
+        }
+      },
+      
+      _updatePositionClasses: function (relativeTo) {
+        // this function only works when position is "left" or "right"
+        if(this.position != "left" && this.position != "right") return;
+        
+        var rect = relativeTo.getBoundingClientRect();
+        var elementPositionY = rect.top;
+        var viewportHeight = document.documentElement.clientHeight;
+        var sixtyPercentOfViewportHeight = viewportHeight * 0.6;
+        var container = this.$.container;
+        var content = this.$.atCoreDropdownContent;
+        var outline = this.$.outline;
+
+        // remove arrow classes if arrow exists
+        if (this.arrow == true) {
+          Polymer.dom(container).classList.remove("arrow-bottom-left");
+          Polymer.dom(container).classList.remove("arrow-bottom-right");
+          Polymer.dom(container).classList.remove("arrow-top-left");
+          Polymer.dom(container).classList.remove("arrow-top-right");
+        }
+
+        // remove bottom classes and add top classes if the element is positioned in the lower 40% of the screen
+        if (elementPositionY > sixtyPercentOfViewportHeight) {
+          if (this.position == "left") {
+            Polymer.dom(content).classList.remove("position--bottom-left");
+            Polymer.dom(outline).classList.remove("position--bottom-left");
+            Polymer.dom(content).classList.add("position--top-left");
+            Polymer.dom(outline).classList.add("position--top-left");
+
+            if (this.arrow == true) Polymer.dom(container).classList.add("arrow-top-left");
+          }
+
+          if (this.position == "right") {
+            Polymer.dom(content).classList.remove("position--bottom-right");
+            Polymer.dom(outline).classList.remove("position--bottom-right");
+            Polymer.dom(content).classList.add("position--top-right");
+            Polymer.dom(outline).classList.add("position--top-right");
+
+            if (this.arrow == true) Polymer.dom(container).classList.add("arrow-top-right");
+          }
+          
+        }
+
+        // remove top classes and add bottom classes if the element is positioned in the upper 60% of the screen
+        if (elementPositionY < sixtyPercentOfViewportHeight) {
+          if (this.position == "left") {
+            Polymer.dom(content).classList.remove("position--top-left");
+            Polymer.dom(outline).classList.remove("position--top-left");
+            Polymer.dom(content).classList.add("position--bottom-left");
+            Polymer.dom(outline).classList.add("position--bottom-left");
+
+            if (this.arrow == true) Polymer.dom(container).classList.add("arrow-bottom-left");
+          }
+
+          if (this.position == "right") {
+            Polymer.dom(content).classList.remove("position--top-right");
+            Polymer.dom(outline).classList.remove("position--top-right");
+            Polymer.dom(content).classList.add("position--bottom-right");
+            Polymer.dom(outline).classList.add("position--bottom-right");
+
+            if (this.arrow == true) Polymer.dom(container).classList.add("arrow-bottom-right");
+          }
         }
       },
 
@@ -452,8 +553,9 @@
         container.style.right = '';
         container.style.top = '';
         container.style.bottom = '';
-        
+
         var viewportHeight = document.documentElement.clientHeight;
+        this._updatePositionClasses(relativeTo);
 
         var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
         var scrollY = window.pageYOffset || document.documentElement.scrollTop;
@@ -522,6 +624,7 @@
 
         if (relativeTo) {
           this._updateDropdownPosition(relativeTo);
+          this._updatePositionClasses(relativeTo);
         }
 
         var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
