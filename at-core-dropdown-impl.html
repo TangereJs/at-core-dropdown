@@ -225,7 +225,7 @@
     <div id="container" class$="container [[_computeArrowClass(arrow, position)]]">
       <div id="mask" class="hidden" hidden$="[[noMask]]" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
-      <div id="atCoreDropdownContent" class$="content hidden position--bottom-left [[_computeNoShadow(noShadow)]]">
+      <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
         <content id="insertPoint"></content>
         <slot id="insertPoint2"></slot>
       </div>
@@ -323,7 +323,8 @@
 
         noShadow: {
           type: Boolean,
-          value: false
+          value: false,
+          observer: '_noShadowChanged'
         },
 
         zIndex: {
@@ -387,15 +388,6 @@
         var positionDashCase = Polymer.CaseMap.camelToDashCase(position);
         var className = 'arrow-' + positionDashCase;
         return className;
-      },
-
-      _computeNoShadow: function (noShadow) {
-        if (noShadow == true) {
-          console.log("returning no shadow");
-          return 'noShadow';
-        } else {
-          return '';
-        }
       },
       
       ready: function() {
@@ -496,6 +488,16 @@
        
         Polymer.dom(content).classList.add(className);
         Polymer.dom(outline).classList.add(className);
+      },
+
+      _noShadowChanged: function (newValue, oldValue) {
+        var content = this.$.atCoreDropdownContent;
+
+        if (newValue == true) {
+          Polymer.dom(content).classList.add("noShadow");
+        } else {
+          Polymer.dom(content).classList.remove("noShadow");
+        }
       },
 
       toggle: function(relativeTo, evt) {
