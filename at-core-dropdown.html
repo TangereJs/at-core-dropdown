@@ -14,7 +14,7 @@
       }
     </style>
 
-    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" arrow$="[[arrow]]" no-mask="[[noMask]]" z-index="[[zIndex]]" render-mode="[[renderMode]]">
+    <at-core-dropdown-impl id$="[[_computeImplId()]]" position="[[position]]" x-offset="[[xOffset]]" y-offset="[[yOffset]]" open="{{open}}" arrow$="[[arrow]]" no-mask="[[noMask]]" no-shadow="[[noShadow]]" z-index="[[zIndex]]" render-mode="[[renderMode]]">
     </at-core-dropdown-impl>
     <div hidden$="{{!open}}">
       <slot id="slotElement"></slot>
@@ -103,6 +103,11 @@
         },
 
         noMask: {
+          type: Boolean,
+          value: false
+        },
+
+        noShadow: {
           type: Boolean,
           value: false
         },

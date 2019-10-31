@@ -30,7 +30,6 @@
       .container.is-visible,
       .container.is-animating {
         z-index: 1999;
-        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
         visibility: visible;
       }
 
@@ -47,8 +46,6 @@
         overflow: hidden;
         opacity: 0;
         transform: scaleY(0);
-        -webkit-transform-origin: top;
-        transform-origin: top;
         box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
         transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: -1;
@@ -56,24 +53,28 @@
 
       .container.is-visible .outline {
         opacity: 1;
-        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
         transform: scaleY(1);
         z-index: 1999;
       }
 
+      .outline.position--bottom-left {
+        -webkit-transform-origin: top;
+        transform-origin: top;
+      }
+
       .outline.position--bottom-right {
-        -webkit-transform-origin: 100% 0;
-        transform-origin: 100% 0;
+        -webkit-transform-origin: top;
+        transform-origin: top;
       }
 
       .outline.position--top-left {
-        -webkit-transform-origin: 0 100%;
-        transform-origin: 0 100%;
+        -webkit-transform-origin: bottom;
+        transform-origin: bottom;
       }
 
       .outline.position--top-right {
-        -webkit-transform-origin: 100% 100%;
-        transform-origin: 100% 100%;
+        -webkit-transform-origin: bottom;
+        transform-origin: bottom;
       }
 
       .content {
@@ -87,8 +88,6 @@
         margin: 0;
         opacity: 0;
         transform: scaleY(0);
-        -webkit-transform-origin: top;
-        transform-origin: top;
         z-index: -1;
         @apply --at-picker-background;
       }
@@ -104,19 +103,31 @@
         z-index: 1999;
       }
 
+      .noShadow {
+        box-shadow: none !important;
+      }
+
       .content.is-animating {
-        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
         transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .content.position--bottom-left {
+        -webkit-transform-origin: top;
+        transform-origin: top;
       }
 
       .content.position--bottom-right {
         left: auto;
         right: 0;
+        -webkit-transform-origin: top;
+        transform-origin: top;
       }
 
       .content.position--top-left {
         top: auto;
         bottom: 0;
+        -webkit-transform-origin: bottom;
+        transform-origin: bottom;
       }
 
       .content.position--top-right {
@@ -124,6 +135,8 @@
         left: auto;
         bottom: 0;
         right: 0;
+        -webkit-transform-origin: bottom;
+        transform-origin: bottom;
       }
 
       .content.position--unaligned {
@@ -212,7 +225,7 @@
     <div id="container" class$="container [[_computeArrowClass(arrow, position)]]">
       <div id="mask" class="hidden" hidden$="[[noMask]]" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
-      <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
+      <div id="atCoreDropdownContent" class$="content hidden position--bottom-left [[_computeNoShadow(noShadow)]]">
         <content id="insertPoint"></content>
         <slot id="insertPoint2"></slot>
       </div>
@@ -308,6 +321,11 @@
           value: false
         },
 
+        noShadow: {
+          type: Boolean,
+          value: false
+        },
+
         zIndex: {
           type: String,
           value: "1999",
@@ -369,6 +387,15 @@
         var positionDashCase = Polymer.CaseMap.camelToDashCase(position);
         var className = 'arrow-' + positionDashCase;
         return className;
+      },
+
+      _computeNoShadow: function (noShadow) {
+        if (noShadow == true) {
+          console.log("returning no shadow");
+          return 'noShadow';
+        } else {
+          return '';
+        }
       },
       
       ready: function() {
