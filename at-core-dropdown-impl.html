@@ -330,6 +330,7 @@
         zIndex: {
           type: String,
           value: "1999",
+          observer: '_zIndexChanged'
         },
 
         renderMode: {
@@ -378,7 +379,7 @@
       },
 
       _ARROW_Y_OFFSET: 8,
-
+      
       _computeArrowClass: function(arrow, position) {
         if (!arrow) return '';
 
@@ -498,6 +499,18 @@
         } else {
           Polymer.dom(content).classList.remove("noShadow");
         }
+      },
+
+      _zIndexChanged: function (newValue, oldValue) {
+        if (oldValue == undefined) return;
+
+        var container = this.$.container;
+        var mask = this.$.mask;
+        var dropdownContent = this.$.atCoreDropdownContent;
+
+        container.style.zIndex = newValue;
+        mask.style.zIndex = newValue - 10;
+        dropdownContent.style.zIndex = newValue;
       },
 
       toggle: function(relativeTo, evt) {
@@ -656,7 +669,7 @@
         container.style.zIndex = this.zIndex;
         mask.style.zIndex = this.zIndex - 10;
         dropdownContent.style.zIndex = this.zIndex;
-
+        
         this.toggleClass('hidden', false, content);
 
         this._updateContainerAndOutlineSize(content, container, this.$.outline);
