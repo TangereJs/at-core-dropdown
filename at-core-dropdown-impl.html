@@ -89,6 +89,9 @@
         opacity: 0;
         transform: scaleY(0);
         z-index: -1;
+      }
+
+      .innerContent {
         @apply --at-picker-background;
       }
 
@@ -226,8 +229,10 @@
       <div id="mask" class="hidden" hidden$="[[noMask]]" on-tap="_maskOnTap"></div>
       <div id="outline" class="outline position--bottom-left"></div>
       <div id="atCoreDropdownContent" class="content hidden position--bottom-left">
-        <content id="insertPoint"></content>
-        <slot id="insertPoint2"></slot>
+        <div class="innerContent">
+          <content id="insertPoint"></content>
+          <slot id="insertPoint2"></slot>
+        </div>
       </div>
     </div>
   </template>
