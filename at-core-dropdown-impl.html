@@ -396,11 +396,13 @@
         return className;
       },
       
-      ready: function() {
+      ready: function () {
+
         var self = this;
         Polymer.dom(this.$.insertPoint).observeNodes(function(info) {
           self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
         });
+
         Polymer.dom(this.$.insertPoint2).observeNodes(function(info) {
           self._updateContainerAndOutlineSize(self.$.atCoreDropdownContent, self.$.container, self.$.outline);
         });
@@ -520,9 +522,7 @@
 
       toggle: function(relativeTo, evt) {
         this._updateDropdownPosition(relativeTo);
-
-        this._updatePositionClasses(relativeTo);
-
+        
         var container = this.$.container;
         if (container.classList.contains(this.CssClasses_.IS_VISIBLE)) {
           this.hide();
@@ -614,47 +614,58 @@
         var viewportHeight = document.documentElement.clientHeight;
         this._updatePositionClasses(relativeTo);
 
-        var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-        var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        Tangere.asyncQueue.add("at-carbon-menu-button._updateDropdownPosition", function () {
+          
+          var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+          var scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
-        var leftVal, topVal, bottomVal;
-        var arrowYOffset = this.arrow ? this._ARROW_Y_OFFSET : 0;
+          var leftVal, topVal, bottomVal;
+          var arrowYOffset = this.arrow ? this._ARROW_Y_OFFSET : 0;
 
-        if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
-          // Do not position the menu automatically. Requires the developer to
-          // manually specify position.
-        } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
-          // Position below the "for" element, aligned to its right.
-          leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
-          container.style.left = leftVal + 'px';
+          if (content.classList.contains(this.CssClasses_.UNALIGNED)) {
+            // Do not position the menu automatically. Requires the developer to
+            // manually specify position.
 
-          topVal = rect.top + rect.width + yOffset + scrollY + arrowYOffset;
-          container.style.top = topVal + 'px';
+          } else if (content.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
 
-        } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
-          // Position above the "for" element, aligned to its left.
-          leftVal = rect.left + xOffset + scrollX;
-          container.style.left = leftVal + 'px';
+            // Position below the "for" element, aligned to its right.
+            leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
+            container.style.left = leftVal + 'px';
 
-          bottomVal = viewportHeight - rect.top - yOffset - scrollY + arrowYOffset;
-          container.style.bottom = bottomVal + 'px';
+            topVal = rect.top + rect.width + yOffset + scrollY + arrowYOffset;
+            container.style.top = topVal + 'px';
 
-        } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
-          // Position above the "for" element, aligned to its right.
-          leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
-          container.style.left = leftVal + 'px';
+            console.log("left " + leftVal + ", top " + topVal);
 
-          bottomVal = viewportHeight - rect.top - yOffset - scrollY + arrowYOffset;
-          container.style.bottom = bottomVal + 'px';
+          } else if (content.classList.contains(this.CssClasses_.TOP_LEFT)) {
 
-        } else {          
-          // Default: position below the "for" element, aligned to its left.
-          leftVal = rect.left + xOffset + scrollX;
-          container.style.left = leftVal + 'px';
+            // Position above the "for" element, aligned to its left.
+            leftVal = rect.left + xOffset + scrollX;
+            container.style.left = leftVal + 'px';
 
-          topVal = rect.top + rect.height + yOffset + scrollY + arrowYOffset;
-          container.style.top = topVal + 'px';
-        }
+            bottomVal = viewportHeight - rect.top - yOffset - scrollY + arrowYOffset;
+            container.style.bottom = bottomVal + 'px';
+
+          } else if (content.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+
+            // Position above the "for" element, aligned to its right.
+            leftVal = rect.left + rect.width - contentRect.width + xOffset + scrollX;
+            container.style.left = leftVal + 'px';
+
+            bottomVal = viewportHeight - rect.top - yOffset - scrollY + arrowYOffset;
+            container.style.bottom = bottomVal + 'px';
+
+          } else {
+
+            // Default: position below the "for" element, aligned to its left.
+            leftVal = rect.left + xOffset + scrollX;
+            container.style.left = leftVal + 'px';
+
+            topVal = rect.top + rect.height + yOffset + scrollY + arrowYOffset;
+            container.style.top = topVal + 'px';
+          }
+
+        }, this);
 
       },
 
@@ -677,34 +688,37 @@
         
         this.toggleClass('hidden', false, content);
 
-        this._updateContainerAndOutlineSize(content, container, this.$.outline);
+        Tangere.asyncQueue.add("at-core-dropdown-impl.show", function () {
+          this._updateContainerAndOutlineSize(content, container, this.$.outline);
 
-        if (relativeTo) {
-          this._updateDropdownPosition(relativeTo);
-          this._updatePositionClasses(relativeTo);
-        }
+          Tangere.asyncQueue.add("at-core-dropdown-impl.show2", function () {
+            if (relativeTo) {
+              this._updateDropdownPosition(relativeTo);
+            }
 
-        var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
+            var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
 
-        // Turn on animation, and apply the final clip.
-        // Also make it visible. This triggers the transitions.
-        this._requestAnimationFrameEnded = false;
-        requestAnimationFrame(function() {
-          Polymer.dom(content).classList.add(this.CssClasses_.IS_ANIMATING);
-          // content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
-          Polymer.dom(container).classList.add(this.CssClasses_.IS_VISIBLE);
-          this._requestAnimationFrameEnded = true;
-        }.bind(this));
+            // Turn on animation, and apply the final clip.
+            // Also make it visible. This triggers the transitions.
+            this._requestAnimationFrameEnded = false;
+            requestAnimationFrame(function () {
+              Polymer.dom(content).classList.add(this.CssClasses_.IS_ANIMATING);
+              // content.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
+              Polymer.dom(container).classList.add(this.CssClasses_.IS_VISIBLE);
+              this._requestAnimationFrameEnded = true;
+            }.bind(this));
 
-        // Clean up after the animation is complete.
-        this.addAnimationEndListener_();
+            // Clean up after the animation is complete.
+            this.addAnimationEndListener_();
 
-        var mask = this.$.mask;
-        this.toggleClass('hidden', false, mask);
+            var mask = this.$.mask;
+            this.toggleClass('hidden', false, mask);
 
-        this._isOpen = true;
-        this.open = true;
-        // this.focus();
+            this._isOpen = true;
+            this.open = true;
+            // this.focus();
+          }, this);
+        }, this);
       },
 
       _updateContainerAndOutlineSize: function(contentNode, containerNode, outlineNode) {
@@ -717,8 +731,10 @@
         var height = contentClientRect.height;
         var width = contentClientRect.width;
 
+        console.log("_updateContainerAndOutlineSize width " + width);
+
         // Apply the inner element's size to the container and outline.
-        containerNode.style.width = width + 'px';
+        containerNode.style.setProperty('width', width + 'px', 'important');
         containerNode.style.height = height + 'px';
         outlineNode.style.width = width + 'px';
         outlineNode.style.height = height + 'px';

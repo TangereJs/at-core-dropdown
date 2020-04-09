@@ -1,6 +1,6 @@
 {
   "name": "at-core-dropdown",
-  "version": "1.0.0.77",
+  "version": "1.0.0.91",
   "private": true,
   "dependencies": {
     "tangere": "TangereJs/tangere#master",
